@@ -7,11 +7,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import hilos.HiloReloj;
 import utils.ConectorBD;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
-public class frmLogin extends JFrame {
+public class frmLogin extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
+	private JTextField txtUser;
+	private JTextField txtPassword;
+	public static JLabel lblReloj;
+	private JButton btnIniciarSesion;
 
 	/**
 	 * Launch the application.
@@ -33,18 +46,99 @@ public class frmLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public frmLogin() {
+		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 330, 500);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-	
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("USERNAME");
+		lblNewLabel.setFont(new Font("Sitka Text", Font.BOLD, 14));
+		lblNewLabel.setBounds(45, 264, 84, 18);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblPassword = new JLabel("PASSWORD");
+		lblPassword.setFont(new Font("Sitka Text", Font.BOLD, 14));
+		lblPassword.setBounds(45, 339, 82, 18);
+		contentPane.add(lblPassword);
+		
+		JLabel lblNewLabel_1 = new JLabel("BIENVENIDO");
+		lblNewLabel_1.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 24));
+		lblNewLabel_1.setBounds(70, 209, 190, 29);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel imgLogin = new JLabel("");
+		imgLogin.setIcon(new ImageIcon(frmLogin.class.getResource("/img/loginGit.png")));
+		imgLogin.setBounds(100, 59, 130, 130);
+		contentPane.add(imgLogin);
+		
+		JLabel imgUser = new JLabel("");
+		imgUser.setIcon(new ImageIcon(frmLogin.class.getResource("/img/imgUser.png")));
+		imgUser.setBounds(45, 292, 20, 20);
+		contentPane.add(imgUser);
+		
+		JLabel imgPass = new JLabel("");
+		imgPass.setIcon(new ImageIcon(frmLogin.class.getResource("/img/imgPass.png")));
+		imgPass.setBounds(45, 367, 20, 20);
+		contentPane.add(imgPass);
+		
+		btnIniciarSesion = new JButton("INICIAR SESION");
+		btnIniciarSesion.addActionListener(this);
+		btnIniciarSesion.setFont(new Font("Ebrima", Font.BOLD, 15));
+		btnIniciarSesion.setBounds(25, 426, 280, 50);
+		contentPane.add(btnIniciarSesion);
+		
+		txtUser = new JTextField();
+		txtUser.setBounds(75, 292, 200, 27);
+		contentPane.add(txtUser);
+		txtUser.setColumns(10);
+		
+		txtPassword = new JTextField();
+		txtPassword.setColumns(10);
+		txtPassword.setBounds(75, 367, 200, 27);
+		contentPane.add(txtPassword);
+		
+		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		btnNewButton_1.setContentAreaFilled(false);
+		btnNewButton_1.setBorderPainted(false);
+		btnNewButton_1.setSelectedIcon(null);
+		btnNewButton_1.setPressedIcon(new ImageIcon(frmLogin.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton_1.setRolloverIcon(new ImageIcon(frmLogin.class.getResource("/img/BOTON_CERRAR_2.png")));
+		btnNewButton_1.setIcon(new ImageIcon(frmLogin.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton_1.setBounds(292, 10, 28, 28);
+		contentPane.add(btnNewButton_1);
+		
+		lblReloj = new JLabel("00:00:00 A. A.");
+		lblReloj.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReloj.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+		lblReloj.setBounds(10, 10, 119, 19);
+		contentPane.add(lblReloj);
+		iniciarReloj();
 		conectarbd();
+	}
+	private void iniciarReloj() {
+		HiloReloj reloj = new HiloReloj();
+		reloj.start();
 	}
 	public void conectarbd() {
 		ConectorBD conexion = new ConectorBD();
 		conexion.getConexion();
 	}
-
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnIniciarSesion) {
+			IniciarSesion(arg0);
+		}
+	}
+	protected void IniciarSesion(ActionEvent arg0) {
+//		String usuario = 
+	}
 }
