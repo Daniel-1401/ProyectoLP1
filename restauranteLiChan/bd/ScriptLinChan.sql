@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_boleta_detalle` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tbBoletaDetalle_tbBoleta:idBoleta`
     FOREIGN KEY (`idBoleta`)
-    REFERENCES `RestauranteLiChan`.`tb_boleta` (`idCliente`)
+    REFERENCES `RestauranteLiChan`.`tb_boleta` (`idBoleta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -228,28 +228,19 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 --------------------------
--- DATOS TB_ADMINISTRADOR
---------------------------
-
-INSERT INTO `tb_administrador` VALUES('A0001', 2500);
-INSERT INTO `tb_administrador` VALUES('A0002', 2500);
-
-
---------------------------
--- DATOS TB_RECEPCIONISTA
---------------------------
-
-INSERT INTO `tb_recepcionista` VALUES('R0001',5,6,16);
-INSERT INTO `tb_recepcionista` VALUES('R0002',4,5,15);
-INSERT INTO `tb_recepcionista` VALUES('R0003',7,4,14);
-
-
---------------------------
 -- DATOS TB_CARGO
 --------------------------
 
 INSERT INTO `tb_cargo` VALUES (1, "Administrador");
 INSERT INTO `tb_cargo` VALUES (2, "Recepcionista");
+
+
+--------------------------
+-- DATOS TB_TIPO_DOCUMENTO
+--------------------------
+
+INSERT INTO `tb_tipo_documento` VALUES (1, "DNI");
+INSERT INTO `tb_tipo_documento` VALUES (2, "PASAPORTE");
 
 
 --------------------------
@@ -264,17 +255,6 @@ INSERT INTO tb_clientes VALUES ('C0005', 'Enrique'		  , 'Correa Flores'	   ,'Av.
 
 
 --------------------------
--- DATOS TB_EMPLEADO
---------------------------
-
-INSERT INTO `tb_empleado` VALUES ('A0001','CARLOS','AVALOS',1,'98125647'	,'2002-01-14',1,'activo',0001);
-INSERT INTO `tb_empleado` VALUES ('A0002','EDSON' ,'MENDO' ,1,'94678135'	,'1999-03-04',1,'activo',0002);
-INSERT INTO `tb_empleado` VALUES ('R0001','JUAN'  ,'MENDEZ',1,'45612378'	,'1995-10-18',2,'activo',0003);
-INSERT INTO `tb_empleado` VALUES ('R0002','PEPE'  ,'LOPEZ' ,2,'P20154687913','1990-12-07',2,'activo',0004);
-INSERT INTO `tb_empleado` VALUES ('R0003','PEDRO' ,'LOPEZ' ,2,'P20176542676','1985-08-27',2,'activo',0005);
-
-
---------------------------
 -- DATOS TB_PRODUCTOS
 --------------------------
 
@@ -286,14 +266,6 @@ INSERT INTO `tb_producto` VALUES ('P0005', 'Tallarin con Pollo'		  , 23.00);
 
 
 --------------------------
--- DATOS TB_TIPO_DOCUMENTO
---------------------------
-
-INSERT INTO `tb_tipo_documento` VALUES (1, "DNI");
-INSERT INTO `tb_tipo_documento` VALUES (2, "PASAPORTE");
-
-
---------------------------
 -- DATOS TB_USUARIOS
 --------------------------
 
@@ -302,6 +274,34 @@ INSERT INTO `tb_usuarios` VALUES(0002, "AD02", "ADMIN02");
 INSERT INTO `tb_usuarios` VALUES(0003, "RC01", "RECEP01");
 INSERT INTO `tb_usuarios` VALUES(0004, "RC02", "RECEP02");
 INSERT INTO `tb_usuarios` VALUES(0005, "RC03", "RECEP03");
+
+
+--------------------------
+-- DATOS TB_EMPLEADO
+--------------------------
+
+INSERT INTO `tb_empleado` VALUES ('A0001','CARLOS','AVALOS',1,'98125647'	,'2002-01-14',1,'activo',0001);
+INSERT INTO `tb_empleado` VALUES ('A0002','EDSON' ,'MENDO' ,1,'94678135'	,'1999-03-04',1,'activo',0002);
+INSERT INTO `tb_empleado` VALUES ('R0001','JUAN'  ,'MENDEZ',1,'45612378'	,'1995-10-18',2,'activo',0003);
+INSERT INTO `tb_empleado` VALUES ('R0002','PEPE'  ,'LOPEZ' ,2,'P20154687913','1990-12-07',2,'activo',0004);
+INSERT INTO `tb_empleado` VALUES ('R0003','PEDRO' ,'LOPEZ' ,2,'P20176542676','1985-08-27',2,'activo',0005);
+
+
+--------------------------
+-- DATOS TB_ADMINISTRADOR
+--------------------------
+
+INSERT INTO `tb_administrador` VALUES('A0001', 2500.00);
+INSERT INTO `tb_administrador` VALUES('A0002', 2500.00);
+
+
+--------------------------
+-- DATOS TB_RECEPCIONISTA
+--------------------------
+
+INSERT INTO `tb_recepcionista` VALUES('R0001',5,6,16);
+INSERT INTO `tb_recepcionista` VALUES('R0002',4,5,15);
+INSERT INTO `tb_recepcionista` VALUES('R0003',7,4,14);
 
 
 --------------------------
