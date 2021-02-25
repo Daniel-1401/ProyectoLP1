@@ -10,7 +10,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema RestauranteLiChan
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `RestauranteLiChan` ;
+DROP SCHEMA IF EXISTS `RestauranteLiChan`;
 
 -- -----------------------------------------------------
 -- Schema RestauranteLiChan
@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_empleado` (
   `numeroDocumento` VARCHAR(12) NOT NULL,
   `fechaNacimiento` DATE NOT NULL,
   `idCargo` INT NOT NULL,
+  `genero` VARCHAR(5) NOT NULL,
   `estado` VARCHAR(8) NOT NULL DEFAULT 'activo',
   `idUsuario` INT NOT NULL,
   PRIMARY KEY (`idEmpleado`),
@@ -247,11 +248,11 @@ INSERT INTO `tb_tipo_documento` VALUES (2, "PASAPORTE");
 -- DATOS TB_CLIENTES
 --------------------------
 
-INSERT INTO tb_clientes VALUES ('C0001', 'Luis Erick'	  , 'Palomino Carranza','Av. los Alisos 450' , 980526474,1,65935856);
-INSERT INTO tb_clientes VALUES ('C0002', 'Jhomira'	 	  , 'Vega Galan'	   ,'Av las Palmeras 850', 965587430,2,'P20198056933');
-INSERT INTO tb_clientes VALUES ('C0003', 'Carlos Miguel'  , 'Ramos Marin'	   ,'Jr los Incas 2563'  , 960254793,2,'P20196358505');
-INSERT INTO tb_clientes VALUES ('C0004', 'Monica Fiorella', 'Hernandez Sanchez','Av. Argentina 1050' , 921347580,1,63587423);
-INSERT INTO tb_clientes VALUES ('C0005', 'Enrique'		  , 'Correa Flores'	   ,'Av. Colonial 700'   , 999674210,1,65423196);
+INSERT INTO `tb_clientes` VALUES ('C0001', 'Luis Erick'	  , 'Palomino Carranza','Av. los Alisos 450' , 980526474,1,65935856);
+INSERT INTO `tb_clientes` VALUES ('C0002', 'Jhomira'	 	  , 'Vega Galan'	   ,'Av las Palmeras 850', 965587430,2,'P20198056933');
+INSERT INTO `tb_clientes` VALUES ('C0003', 'Carlos Miguel'  , 'Ramos Marin'	   ,'Jr los Incas 2563'  , 960254793,2,'P20196358505');
+INSERT INTO `tb_clientes` VALUES ('C0004', 'Monica Fiorella', 'Hernandez Sanchez','Av. Argentina 1050' , 921347580,1,63587423);
+INSERT INTO `tb_clientes` VALUES ('C0005', 'Enrique'		  , 'Correa Flores'	   ,'Av. Colonial 700'   , 999674210,1,65423196);
 
 
 --------------------------
@@ -280,11 +281,11 @@ INSERT INTO `tb_usuarios` VALUES(0005, "RC03", "RECEP03");
 -- DATOS TB_EMPLEADO
 --------------------------
 
-INSERT INTO `tb_empleado` VALUES ('A0001','CARLOS','AVALOS',1,'98125647'	,'2002-01-14',1,'activo',0001);
-INSERT INTO `tb_empleado` VALUES ('A0002','EDSON' ,'MENDO' ,1,'94678135'	,'1999-03-04',1,'activo',0002);
-INSERT INTO `tb_empleado` VALUES ('R0001','JUAN'  ,'MENDEZ',1,'45612378'	,'1995-10-18',2,'activo',0003);
-INSERT INTO `tb_empleado` VALUES ('R0002','PEPE'  ,'LOPEZ' ,2,'P20154687913','1990-12-07',2,'activo',0004);
-INSERT INTO `tb_empleado` VALUES ('R0003','PEDRO' ,'LOPEZ' ,2,'P20176542676','1985-08-27',2,'activo',0005);
+INSERT INTO `tb_empleado` VALUES ('A0001','CARLOS','AVALOS',1,'98125647'	,'2002-01-14',1,'men' ,'activo',0001);
+INSERT INTO `tb_empleado` VALUES ('A0002','EDSON' ,'MENDO' ,1,'94678135'	,'1999-03-04',1,'men'  ,'activo',0002);
+INSERT INTO `tb_empleado` VALUES ('R0001','JUAN'  ,'MENDEZ',1,'45612378'	,'1995-10-18',2,'men'  ,'activo',0003);
+INSERT INTO `tb_empleado` VALUES ('R0002','MARIA' ,'LOPEZ' ,2,'P20154687913','1990-12-07',2,'woman','activo',0004);
+INSERT INTO `tb_empleado` VALUES ('R0003','ABBY'  ,'LOPEZ' ,2,'P20176542676','1985-08-27',2,'woman','activo',0005);
 
 
 --------------------------
@@ -329,4 +330,32 @@ INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0005',5,115.00);
 INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0001',2,18.00);
 INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0004',3,75.00);
 INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0003',4,38.00);
+
+
+--------------------------
+----- PROCEDIMIENTOS -----
+--------------------------
+
+DELIMITER $$
+CREATE PROCEDURE ins_empleadoUsuario(
+	`idEmpleado` 		VARCHAR(10),
+	`nombreEmpleado` 	VARCHAR(45),
+	`apellidoEmpleado` 	VARCHAR(45),
+	`idTipoDocumento` 	INT,
+	`numeroDocumento` 	VARCHAR(12),
+	`fechaNacimiento` 	DATE,
+	`idCargo` 			INT,
+	`estado` 			VARCHAR(8),
+	`idUsuario` 		INT,
+	`login` 			VARCHAR(15),
+	`password` 			VARCHAR(20)
+)
+BEGIN
+	INSERT INTO `tb_usuarios` VALUES(`idUsuario`, `login`, `password`);
+	INSERT INTO `tb_empleado` VALUES (`idEmpleado`,`nombreEmpleado`,`apellidoEmpleado`,`idTipoDocumento`,`numeroDocumento`,`fechaNacimiento`,`idCargo`,`estado`,`idUsuario`);
+END $$
+DELIMITER ;
+
+-- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,'activo',0006,'login','contraseña');
+
 
