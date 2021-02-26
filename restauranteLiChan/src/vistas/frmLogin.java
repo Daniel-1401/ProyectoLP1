@@ -8,8 +8,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import hilos.HiloReloj;
+import mantemiento.GestionAcceso;
+import modelos.Acceso;
+import modelos.Usuario;
 import utils.ConectorBD;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,15 +22,16 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JPasswordField;
 
 public class frmLogin extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txtUser;
-	private JTextField txtPassword;
-	public static JLabel lblReloj;
 	private JButton btnIniciarSesion;
-
+	private JPasswordField txtPass;
+	public static JLabel lblReloj;
+	public static Acceso user = new Acceso();
 	/**
 	 * Launch the application.
 	 */
@@ -93,14 +99,9 @@ public class frmLogin extends JFrame implements ActionListener {
 		contentPane.add(btnIniciarSesion);
 		
 		txtUser = new JTextField();
-		txtUser.setBounds(75, 292, 200, 27);
+		txtUser.setBounds(75, 290, 200, 27);
 		contentPane.add(txtUser);
 		txtUser.setColumns(10);
-		
-		txtPassword = new JTextField();
-		txtPassword.setColumns(10);
-		txtPassword.setBounds(75, 367, 200, 27);
-		contentPane.add(txtPassword);
 		
 		JButton btnNewButton_1 = new JButton("");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -117,11 +118,15 @@ public class frmLogin extends JFrame implements ActionListener {
 		btnNewButton_1.setBounds(292, 10, 28, 28);
 		contentPane.add(btnNewButton_1);
 		
-		lblReloj = new JLabel("00:00:00 A. A.");
+		lblReloj = new JLabel("00:00:00");
 		lblReloj.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReloj.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 		lblReloj.setBounds(10, 10, 119, 19);
 		contentPane.add(lblReloj);
+		
+		txtPass = new JPasswordField();
+		txtPass.setBounds(75, 364, 200, 27);
+		contentPane.add(txtPass);
 		iniciarReloj();
 		conectarbd();
 	}
@@ -139,6 +144,22 @@ public class frmLogin extends JFrame implements ActionListener {
 		}
 	}
 	protected void IniciarSesion(ActionEvent arg0) {
-//		String usuario = 
+		String usuarios = txtUser.getText();
+		String contraseña = String.valueOf(txtPass.getPassword());
+		user = new GestionAcceso().loginAccess(usuarios, contraseña);
+		if(user == null) {
+			System.out.println(usuarios);
+			System.out.println(contraseña);
+			alerta("USUARIO O CLAVE INCORRECTA");
+		}else {
+			frmLoader loader = new frmLoader();
+			loader.setVisible(true);
+			dispose();
+			loader.setLocationRelativeTo(null);
+		}
+		
+	}
+	private void alerta(String mensaje) {
+		JOptionPane.showMessageDialog(null, mensaje);
 	}
 }

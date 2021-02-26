@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -24,8 +25,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
-public class FrmRegistroCliente extends JFrame {
+public class FrmRegistroCliente extends JInternalFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txtCodCliente;
@@ -35,6 +37,7 @@ public class FrmRegistroCliente extends JFrame {
 	private JTextField txtNumDoc;
 	private JComboBox cboDocumento;
 	private JTextField txtNombreCli;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -57,7 +60,6 @@ public class FrmRegistroCliente extends JFrame {
 	 */
 	public FrmRegistroCliente() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 550, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -65,35 +67,35 @@ public class FrmRegistroCliente extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Registro de Clientes");
 		lblNewLabel.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 20));
-		lblNewLabel.setBounds(162, 19, 238, 19);
+		lblNewLabel.setBounds(132, 30, 238, 19);
 		contentPane.add(lblNewLabel);
 		
 		txtCodCliente = new JTextField();
 		txtCodCliente.setEditable(false);
 		txtCodCliente.setColumns(10);
-		txtCodCliente.setBounds(166, 56, 155, 20);
+		txtCodCliente.setBounds(136, 67, 155, 20);
 		contentPane.add(txtCodCliente);
 		
 		JLabel lblNewLabel_1 = new JLabel("C\u00F3digo de Cliente:");
-		lblNewLabel_1.setBounds(40, 59, 127, 14);
+		lblNewLabel_1.setBounds(10, 70, 127, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Apellido:");
-		lblNewLabel_1_1.setBounds(40, 122, 86, 14);
+		lblNewLabel_1_1.setBounds(10, 133, 86, 14);
 		contentPane.add(lblNewLabel_1_1);
 		
 		txtApellidoCli = new JTextField();
 		txtApellidoCli.setColumns(10);
-		txtApellidoCli.setBounds(164, 122, 157, 20);
+		txtApellidoCli.setBounds(134, 133, 157, 20);
 		contentPane.add(txtApellidoCli);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Direcci\u00F3n:");
-		lblNewLabel_1_2.setBounds(40, 161, 101, 14);
+		lblNewLabel_1_2.setBounds(10, 172, 101, 14);
 		contentPane.add(lblNewLabel_1_2);
 		
 		txtDirecCli = new JTextField();
 		txtDirecCli.setColumns(10);
-		txtDirecCli.setBounds(163, 164, 158, 20);
+		txtDirecCli.setBounds(133, 175, 158, 20);
 		contentPane.add(txtDirecCli);
 		
 		JButton btnEliminar = new JButton("Eliminar");
@@ -103,15 +105,15 @@ public class FrmRegistroCliente extends JFrame {
 				txtCodCliente.setEditable(true);
 			}
 		});
-		btnEliminar.setBounds(390, 53, 107, 23);
+		btnEliminar.setBounds(360, 64, 107, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(389, 88, 108, 23);
+		btnBuscar.setBounds(359, 99, 108, 23);
 		contentPane.add(btnBuscar);
 		
 		JButton btnActualizar = new JButton("Actualizar");
-		btnActualizar.setBounds(388, 127, 108, 23);
+		btnActualizar.setBounds(358, 138, 108, 23);
 		contentPane.add(btnActualizar);
 		
 		JButton btnLimpiar = new JButton("Limpiar");
@@ -120,7 +122,7 @@ public class FrmRegistroCliente extends JFrame {
 				nuevoCliente();
 			}
 		});
-		btnLimpiar.setBounds(297, 327, 89, 23);
+		btnLimpiar.setBounds(267, 338, 89, 23);
 		contentPane.add(btnLimpiar);
 		
 		JButton btnRegistrar = new JButton("Registrar");
@@ -130,47 +132,57 @@ public class FrmRegistroCliente extends JFrame {
 
 			}
 		});
-		btnRegistrar.setBounds(123, 327, 89, 23);
+		btnRegistrar.setBounds(93, 338, 89, 23);
 		contentPane.add(btnRegistrar);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("Tel\u00E9fono:");
-		lblNewLabel_1_2_1.setBounds(40, 200, 101, 14);
+		lblNewLabel_1_2_1.setBounds(10, 211, 101, 14);
 		contentPane.add(lblNewLabel_1_2_1);
 		
 		JLabel lblNewLabel_1_2_2 = new JLabel("Tipo de Documento:");
-		lblNewLabel_1_2_2.setBounds(40, 232, 114, 14);
+		lblNewLabel_1_2_2.setBounds(10, 243, 114, 14);
 		contentPane.add(lblNewLabel_1_2_2);
 		
 		JLabel lblNewLabel_1_2_3 = new JLabel("Num Documento:");
-		lblNewLabel_1_2_3.setBounds(40, 264, 101, 14);
+		lblNewLabel_1_2_3.setBounds(10, 275, 101, 14);
 		contentPane.add(lblNewLabel_1_2_3);
 		
 		txtTelef = new JTextField();
 		txtTelef.setColumns(10);
-		txtTelef.setBounds(163, 200, 158, 20);
+		txtTelef.setBounds(133, 211, 158, 20);
 		contentPane.add(txtTelef);
 		
 		txtNumDoc = new JTextField();
 		txtNumDoc.setColumns(10);
-		txtNumDoc.setBounds(163, 267, 158, 20);
+		txtNumDoc.setBounds(133, 278, 158, 20);
 		contentPane.add(txtNumDoc);
 		
 		cboDocumento = new JComboBox();
-		cboDocumento.setBounds(163, 234, 158, 22);
+		cboDocumento.setBounds(133, 245, 158, 22);
 		contentPane.add(cboDocumento);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Nombre:");
-		lblNewLabel_1_1_1.setBounds(40, 87, 85, 14);
+		lblNewLabel_1_1_1.setBounds(10, 98, 85, 14);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		txtNombreCli = new JTextField();
 		txtNombreCli.setColumns(10);
-		txtNombreCli.setBounds(164, 87, 157, 20);
+		txtNombreCli.setBounds(134, 98, 157, 20);
 		contentPane.add(txtNombreCli);
-		setLocationRelativeTo(null);
+//		setLocationRelativeTo(null);
 		
 		listadoCombo();
 		txtCodCliente.setText(ObtenerCodigoCliente());
+		
+		btnNewButton = new JButton("");
+		btnNewButton.addActionListener(this);
+		btnNewButton.setPressedIcon(new ImageIcon(FrmRegistroCliente.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton.setRolloverIcon(new ImageIcon(FrmRegistroCliente.class.getResource("/img/BOTON_CERRAR_2.png")));
+		btnNewButton.setIcon(new ImageIcon(FrmRegistroCliente.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton.setContentAreaFilled(false);
+		btnNewButton.setBorderPainted(false);
+		btnNewButton.setBounds(439, 0, 28, 28);
+		contentPane.add(btnNewButton);
 	}
 	
 	void registro() {
@@ -344,8 +356,12 @@ public class FrmRegistroCliente extends JFrame {
 
 		return Integer.parseInt(txtTelef.getText());
 	}
-
-	
-
-	
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnNewButton) {
+			actionPerformedBtnNewButton(arg0);
+		}
+	}
+	protected void actionPerformedBtnNewButton(ActionEvent arg0) {
+		dispose();
+	}
 }
