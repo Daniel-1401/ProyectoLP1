@@ -3,6 +3,7 @@ package interfaces;
 import java.util.ArrayList;
 
 import modelos.RegistroCliente;
+import modelos.RegistroProducto;
 import modelos.TipoDocumento;
 
 public interface MantenimientoInterface {
@@ -14,7 +15,17 @@ public interface MantenimientoInterface {
 	
 	public int registro(RegistroCliente r);
 	
-	public int eliminar(int idCliente);
+	public int eliminar(String idCliente);
 	
+	public RegistroCliente buscar (String idCliente);
+	
+	public int actulizar(RegistroCliente r); 
+	
+	
+	/********* Producto ***********/
+	
+	public String generarCodigoProducto();
+	
+	public int registro(RegistroProducto r);
 
 }

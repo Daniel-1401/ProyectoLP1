@@ -8,12 +8,14 @@ import java.util.ArrayList;
 
 import interfaces.MantenimientoInterface;
 import modelos.RegistroCliente;
+import modelos.RegistroProducto;
 import modelos.TipoDocumento;
 import utils.ConectorBD;
 
 public class GestionMantenimiento implements MantenimientoInterface{
 
-
+	/**** Mantenimiento Cliente  *****/
+	
 	public ArrayList<TipoDocumento> listadoDeDocumento() {
 		
 		ArrayList<TipoDocumento> lista = null;
@@ -90,8 +92,6 @@ public class GestionMantenimiento implements MantenimientoInterface{
 		return codigo;
 	}
 
-
-	/**** Registro Cliente  *****/
 	
 	public int registro(RegistroCliente r) {
 		int rs = 0;
@@ -140,11 +140,8 @@ public class GestionMantenimiento implements MantenimientoInterface{
 		return rs;
 	}
 
-
-
 	
-	
-	public int eliminar(int idCliente) {
+	public int eliminar(String idCliente) {
 		int rs = 0;
 		
 		Connection con = null; 
@@ -155,7 +152,7 @@ public class GestionMantenimiento implements MantenimientoInterface{
 			String sql = "delete from tb_clientes where idCliente = ?";
 			
 			pst = con.prepareStatement(sql);
-			pst.setInt(1, idCliente);
+			pst.setString(1, idCliente);
 			
 			rs = pst.executeUpdate();
 			
@@ -174,7 +171,139 @@ public class GestionMantenimiento implements MantenimientoInterface{
 	}
 
 
+	
+	public RegistroCliente buscar(String idCliente) {
+		RegistroCliente r = null;
+		
+		Connection con = null; 
+		PreparedStatement pst = null; 
+		ResultSet rs = null; 
+		
+		try {
+			con = ConectorBD.getConexion();
+			String sql = "select * from tb_clientes where idCliente = ?";
+			
+			pst = con.prepareStatement(sql);
+			pst.setString(1, idCliente);
+			
+			rs = pst.executeQuery();
+			
+			
+			if (rs.next()) {
+				
+				
+				r = new RegistroCliente();
+	
+				r.setIdCliente(rs.getString(1));
+				r.setNombreCliente(rs.getString(2));
+				r.setApellidoCliente(rs.getString(3));
+				r.setDireccionCliente(rs.getString(4));
+				r.setNumeroTelefonico(rs.getInt(5));	
+				r.setIdtipoDocumento(rs.getInt(6));
+				r.setNumeroDocumento(rs.getString(7));	
+				
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Error al Buscar Cliente: " + e.getMessage());
+		} finally {
+			try {
+				if(con != null) {
+					con.close();
+				}
+			}catch (SQLException e) {
+				System.out.println("Error Cerrar la conexión: " + e.getMessage());
+			}
+		}
+		return r;
+	}
 
+
+	//-- FALTA
+	public int actulizar(RegistroCliente r) {
+		int rs = 0;
+		
+		Connection con = null; 
+		PreparedStatement pst = null;
+		
+		try {
+			con = ConectorBD.getConexion();
+			String sql = "{call usp_actulizaUsu(?,?,?,?,?,?,?)}";
+			
+			pst = con.prepareStatement(sql);
+			
+			pst.setString(1, r.getNombreCliente());
+			pst.setString(2, r.getApellidoCliente());
+			pst.setString(3, r.getDireccionCliente());
+			pst.setInt(4, r.getNumeroTelefonico());
+			pst.setInt(5, r.getIdtipoDocumento());
+			pst.setString(6, r.getNumeroDocumento());
+			
+			rs = pst.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("Error al Actualizar: " + e.getMessage());
+		} finally {
+			try {
+				if(con != null) 
+					con.close();
+			}catch (SQLException e) {
+				System.out.println("Error Cerrar la conexión: " + e.getMessage());
+			}
+		}
+		
+		return rs;
+	}
+
+	
+	/**** Mantenimiento Producto  *****/
+	
+	@Override
+	public String generarCodigoProducto() {
+		String codigo = null;
+		
+		Connection con = null;  
+		PreparedStatement pst = null;  
+		ResultSet rs = null;
+		
+		try {
+
+			con = ConectorBD.getConexion();
+			String sql = "select substring(max(idProducto),2) from tb_producto";
+			pst = con.prepareStatement(sql);
+			rs = pst.executeQuery();  
+
+			if (rs.next()) {
+				
+				codigo = String.format("P%04d", rs.getInt(1)+1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Error en generarCodigoProducto : " + e.getMessage());
+		} finally {
+			try {
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+
+				System.out.println("Error al cerrar conexión : " + e.getMessage());
+			}
+		}
+		
+		
+		
+		return codigo;
+	}
+
+
+	@Override
+	public int registro(RegistroProducto r) {
+		
+		return 0;
+	}
+
+
+	
 	
 	
 	

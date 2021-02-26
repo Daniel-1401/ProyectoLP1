@@ -6,10 +6,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import mantemiento.GestionMantenimiento;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FrmRegistroProducto extends JFrame {
 
@@ -44,7 +49,7 @@ public class FrmRegistroProducto extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+	
 		setLocationRelativeTo(null);
 		
 		JLabel lblNewLabel = new JLabel("Registro de Producto");
@@ -65,6 +70,13 @@ public class FrmRegistroProducto extends JFrame {
 		contentPane.add(lblNewLabel_1_2);
 		
 		txtCodProducto = new JTextField();
+		txtCodProducto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtCodProducto.setEditable(true);
+			}
+		});
+		txtCodProducto.setEditable(false);
 		txtCodProducto.setBounds(163, 60, 155, 20);
 		contentPane.add(txtCodProducto);
 		txtCodProducto.setColumns(10);
@@ -98,5 +110,18 @@ public class FrmRegistroProducto extends JFrame {
 		JButton btnLimpiar = new JButton("Limpiar");
 		btnLimpiar.setBounds(305, 196, 89, 23);
 		contentPane.add(btnLimpiar);
+		
+		txtCodProducto.setText(ObtenerCodProducto());
 	}
+	
+	
+	
+	
+	/***** Numero de Registro   *********/
+	private String ObtenerCodProducto() {
+		return new GestionMantenimiento().generarCodigoProducto();
+	}
+	
+	
+	
 }

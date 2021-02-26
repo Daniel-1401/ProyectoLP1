@@ -24,6 +24,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FrmRegistroCliente extends JFrame {
 
@@ -69,6 +73,12 @@ public class FrmRegistroCliente extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		txtCodCliente = new JTextField();
+		txtCodCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtCodCliente.setEditable(true);
+			}
+		});
 		txtCodCliente.setEditable(false);
 		txtCodCliente.setColumns(10);
 		txtCodCliente.setBounds(166, 56, 155, 20);
@@ -100,17 +110,27 @@ public class FrmRegistroCliente extends JFrame {
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eliminarCliente();
-				txtCodCliente.setEditable(true);
+	
 			}
 		});
 		btnEliminar.setBounds(390, 53, 107, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscarCliente();
+			}
+		});
 		btnBuscar.setBounds(389, 88, 108, 23);
 		contentPane.add(btnBuscar);
 		
 		JButton btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actulizarCliente();
+			}
+		});
 		btnActualizar.setBounds(388, 127, 108, 23);
 		contentPane.add(btnActualizar);
 		
@@ -118,6 +138,7 @@ public class FrmRegistroCliente extends JFrame {
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nuevoCliente();
+				txtCodCliente.setEditable(false);
 			}
 		});
 		btnLimpiar.setBounds(297, 327, 89, 23);
@@ -173,6 +194,23 @@ public class FrmRegistroCliente extends JFrame {
 		txtCodCliente.setText(ObtenerCodigoCliente());
 	}
 	
+	void actulizarCliente() {
+		String idCliente, nombreCli, apellidoCli, direcCli, numDocumento;
+		int numeroTel, idtipoDocumento;
+
+		idCliente = leerNombreCli();
+
+		
+		/*int rs = new GestionMantenimiento().actulizar(idCliente);
+		
+		 if(rs == 0) {
+			 JOptionPane.showMessageDialog(this, "Error al Actualizar");
+		 }else {
+			 JOptionPane.showMessageDialog(this, "Cliente " + idCliente + " a sido Actulizado");
+		 }
+		*/
+	}
+	
 	void registro() {
 		
 		String idCliente, nombreCli, apellidoCli, direcCli, numDocumento;
@@ -209,9 +247,40 @@ public class FrmRegistroCliente extends JFrame {
 		
 	}
 	
+	/********** Buscar *******/
+	void buscarCliente() {
+		String idCliente = leerCodCliente();
+		
+		RegistroCliente r = new GestionMantenimiento().buscar(idCliente);
+		
+		if(r == null) {
+			JOptionPane.showMessageDialog(this, "Cliente "+ idCliente + " No existe");
+		}else {
+			txtNombreCli.setText(r.getNombreCliente());
+			txtApellidoCli.setText(r.getApellidoCliente());
+			txtDirecCli.setText(r.getDireccionCliente());
+			txtTelef.setText(r.getNumeroTelefonico() + "");
+			cboDocumento.setSelectedIndex(r.getIdtipoDocumento());
+			txtNumDoc.setText(r.getNumeroDocumento());;
+			
+		}
+	}
+	
+	
+	/******************** Eliminar **********************/
+	
 	void eliminarCliente() {
 		
+		String idCliente;
+		idCliente = leerCodCliente();
 		
+		int rs = new GestionMantenimiento().eliminar(idCliente);
+		
+		 if(rs == 0) {
+			 JOptionPane.showMessageDialog(this, "Error al Eliminar");
+		 }else {
+			 JOptionPane.showMessageDialog(this, "Cliente " + idCliente + " a sido Elimado");
+		 }
 		
 	}
 	
