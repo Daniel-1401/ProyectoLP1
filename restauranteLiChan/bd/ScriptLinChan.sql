@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `RestauranteLiChan`.`tb_usuarios` ;
 CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_usuarios` (
   `idUsuario` INT NOT NULL,
   `login` VARCHAR(15) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
+  `password` CHAR(20) NOT NULL,
   PRIMARY KEY (`idUsuario`),
   UNIQUE INDEX `login_UNIQUE` (`login` ASC) )
 ENGINE = InnoDB;
@@ -345,17 +345,37 @@ CREATE PROCEDURE ins_empleadoUsuario(
 	`numeroDocumento` 	VARCHAR(12),
 	`fechaNacimiento` 	DATE,
 	`idCargo` 			INT,
+	`genero` 			VARCHAR(5) ,
 	`estado` 			VARCHAR(8),
 	`idUsuario` 		INT,
 	`login` 			VARCHAR(15),
-	`password` 			VARCHAR(20)
+	`password` 			CHAR(20)
 )
 BEGIN
 	INSERT INTO `tb_usuarios` VALUES(`idUsuario`, `login`, `password`);
-	INSERT INTO `tb_empleado` VALUES (`idEmpleado`,`nombreEmpleado`,`apellidoEmpleado`,`idTipoDocumento`,`numeroDocumento`,`fechaNacimiento`,`idCargo`,`estado`,`idUsuario`);
+	INSERT INTO `tb_empleado` VALUES (`idEmpleado`,`nombreEmpleado`,`apellidoEmpleado`,`idTipoDocumento`,`numeroDocumento`,`fechaNacimiento`,`idCargo`,`genero`,`estado`,`idUsuario`);
 END $$
 DELIMITER ;
 
--- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,'activo',0006,'login','contraseña');
+-- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,''men','activo',0006,'login','contraseña');
 
+DELIMITER $$
+CREATE PROCEDURE accessUser(
+	`user` VARCHAR(15),
+    `password` VARCHAR(20)
+)
+BEGIN
+	SELECT  `tb_usuarios`.`idUsuario`,
+			`tb_usuarios`.`login`,
+			`tb_usuarios`.`password`,
+            `tb_empleado`.`idCargo`,
+			`tb_empleado`.`genero`,
+            `tb_empleado`.`nombreEmpleado`,
+            `tb_empleado`.`apellidoEmpleado`
+	FROM `tb_usuarios`
+    INNER JOIN `tb_empleado` ON `tb_usuarios`.`idUsuario`=`tb_empleado`.`idUsuario`
+    WHERE `tb_usuarios`.`login` = `user` AND `tb_usuarios`.`password` = `password`;
+END $$
+DELIMITER ;
 
+CALL accessUser("AD01", "ADMIN01");

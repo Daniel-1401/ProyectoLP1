@@ -8,7 +8,7 @@ public class HiloReloj extends Thread {
 	public void run() {
 		while(true) {
 			Date hora = new Date();
-			frmLogin.lblReloj.setText(new SimpleDateFormat("hh:mm:ss aa").format(hora));
+			frmLogin.lblReloj.setText(new SimpleDateFormat("HH:mm:ss").format(hora));
 		}
 		
 	}

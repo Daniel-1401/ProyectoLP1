@@ -90,6 +90,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		panelContenedor.setBorder(new LineBorder(new Color(64, 64, 64), 2, true));
 		panelContenedor.setBounds(160, 40, 780, 700);
 		contentPane.add(panelContenedor);
+		panelContenedor.setLayout(null);
 		
 		btnLogOut = new JButton("LogOut");
 		btnLogOut.addActionListener(this);
@@ -190,7 +191,18 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		imgBarra.setIcon(new ImageIcon(frmPrincipal.class.getResource("/img/barraMenuu.png")));
 		imgBarra.setBounds(20, 40, 135, 700);
 		contentPane.add(imgBarra);
-		
+		switch (frmLogin.user.getCargoUsuario()) {
+		case 1: {
+			btnTransacciones.setEnabled(false);break;
+		}
+		case 2: {
+			btnMantenimiento.setEnabled(false);
+			btnReporte.setEnabled(false);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
@@ -264,6 +276,11 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		private void AccionbtnClientes(ActionEvent arg0) {
 			ajustarPanelContenidoNormal();
 			MenuItem(btnEmpleados, btnClientes,btnProductos, false);
+			FrmRegistroCliente frm = new FrmRegistroCliente();
+			frm.setBounds(100, 100, 485, 400);
+			panelContenedor.add(frm);
+			frm.setVisible(true);
+			
 		}
 		private void AccionbtnProductos(ActionEvent arg0) {
 			ajustarPanelContenidoNormal();
