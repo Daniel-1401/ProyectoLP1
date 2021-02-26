@@ -390,3 +390,21 @@ begin
     where idCliente = id;
 end $$
 delimiter ;
+
+
+/***** CONSULTA CLIENTE ****/
+delimiter $$
+create procedure usp_consultaCliente()
+begin
+	select 
+		c.idCliente,
+        c.nombreCliente,
+        c.apellidoCliente,
+        c.direccionCliente,
+        c.numeroTelefonico,
+        c.numeroDocumento
+	from tb_clientes c;
+end $$
+delimiter ;
+
+call usp_consultaCliente();
