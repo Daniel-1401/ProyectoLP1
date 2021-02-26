@@ -4,7 +4,6 @@ public class Usuario {
 	private int idUsuario;
 	private String login;
 	private String password;
-	private int cargoUsuario;
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -22,12 +21,6 @@ public class Usuario {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public int getCargoUsuario() {
-		return cargoUsuario;
-	}
-	public void setCargoUsuario(int cargoUsuario) {
-		this.cargoUsuario = cargoUsuario;
 	}
 	public Usuario(int idUsuario, String login, String password) {
 		super();
