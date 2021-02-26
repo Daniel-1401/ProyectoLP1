@@ -120,12 +120,12 @@ public class GestionMantenimiento implements MantenimientoInterface{
 			con.commit();
 			
 		} catch (Exception e) {
-			System.out.println("Error en REGISTRO DE CITA: " + e.getMessage());
+			System.out.println("Error en registro de  CLIENTE: " + e.getMessage());
 			rs = 0;
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
-				System.out.println("ERROR EN EL REGISTRO DE CITA" +e1.getMessage());
+				System.out.println("Error en registro de  CLIENTE" +e1.getMessage());
 			}
 		} finally {
 			try {
@@ -296,9 +296,131 @@ public class GestionMantenimiento implements MantenimientoInterface{
 	}
 
 
-	@Override
+	
 	public int registro(RegistroProducto r) {
+		int rs = 0;
 		
+		Connection con = null;  
+		PreparedStatement pst1 = null;
+		
+		try {
+			con = ConectorBD.getConexion();
+			con.setAutoCommit(false);
+			
+			String sql1 = "INSERT INTO tb_producto VALUES (?,?,?)";
+			pst1 = con.prepareStatement(sql1);
+			
+			pst1.setString(1, r.getIdProducto());
+			pst1.setString(2, r.getNombreProducto());
+			pst1.setDouble(3, r.getPrecioProducto());
+
+			rs = pst1.executeUpdate(); 
+			
+			con.commit();
+			
+		} catch (Exception e) {
+			System.out.println("Error en registro de Producto: " + e.getMessage());
+			rs = 0;
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				System.out.println("ERROR EN EL REGISTRO DE Producto" +e1.getMessage());
+			}
+		} finally {
+			try {
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+
+				System.out.println("Error al cerrar conexión : " + e.getMessage());
+			}
+		}	
+
+		return rs;
+	}
+
+
+	@Override
+	public int eliminarProducto(String idProducto) {
+		int rs = 0;
+		
+		Connection con = null; 
+		PreparedStatement pst = null; 
+		
+		try {
+			con = ConectorBD.getConexion();
+			String sql = "delete from tb_producto where idProducto = ?";
+			
+			pst = con.prepareStatement(sql);
+			pst.setString(1, idProducto);
+			
+			rs = pst.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("Error al eliminarProducto: " + e.getMessage());
+		} finally {
+			try {
+				if(con != null) 
+					con.close();
+			}catch (SQLException e) {
+				System.out.println("Error Cerrar la conexión: " + e.getMessage());
+			}
+		}
+		
+		return rs;
+	}
+
+
+
+	
+	public RegistroProducto buscarProducto(String idProducto) {
+		
+		RegistroProducto rp = null;
+		
+		Connection con = null; 
+		PreparedStatement pst = null; 
+		ResultSet rs = null; 
+		
+		try {
+			con = ConectorBD.getConexion();
+			String sql = "select * from tb_Producto where idProducto = ?";
+			
+			pst = con.prepareStatement(sql);
+			pst.setString(1,idProducto);
+			
+			rs = pst.executeQuery();
+			
+			
+			if (rs.next()) {
+				
+				
+				rp = new RegistroProducto();
+	
+				rp.setIdProducto(rs.getString(1));
+				rp.setNombreProducto(rs.getString(2));
+				rp.setPrecioProducto(rs.getDouble(3));
+
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Error al Buscar Producto: " + e.getMessage());
+		} finally {
+			try {
+				if(con != null) {
+					con.close();
+				}
+			}catch (SQLException e) {
+				System.out.println("Error Cerrar la conexión: " + e.getMessage());
+			}
+		}
+		
+		return rp;	
+	}
+
+
+	@Override
+	public int actulizarProducto(RegistroCliente r) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

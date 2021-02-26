@@ -27,5 +27,10 @@ public interface MantenimientoInterface {
 	public String generarCodigoProducto();
 	
 	public int registro(RegistroProducto r);
-
+	
+	public int eliminarProducto (String idProducto);
+	
+	public RegistroProducto buscarProducto (String idProducto);
+	
+	public int actulizarProducto(RegistroCliente r); 
 }

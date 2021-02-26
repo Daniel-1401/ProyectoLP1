@@ -291,7 +291,7 @@ public class FrmRegistroCliente extends JInternalFrame implements ActionListener
 		 if(rs == 0) {
 			 JOptionPane.showMessageDialog(this, "Error al Eliminar");
 		 }else {
-			 JOptionPane.showMessageDialog(this, "Cliente " + idCliente + " a sido Elimado");
+			 JOptionPane.showMessageDialog(this, "Cliente " + idCliente + " a sido Eliminado");
 		 }
 		
 	}

@@ -8,13 +8,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import mantemiento.GestionMantenimiento;
+import modelos.RegistroProducto;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class FrmRegistroProducto extends JFrame {
 
@@ -92,31 +97,162 @@ public class FrmRegistroProducto extends JFrame {
 		contentPane.add(txtPrecioProd);
 		
 		JButton btnRegistrar = new JButton("Registrar");
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				registrar();
+			}
+		});
 		btnRegistrar.setBounds(112, 196, 89, 23);
 		contentPane.add(btnRegistrar);
 		
 		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(387, 57, 89, 23);
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarProducto();
+			}
+		});
+		btnEliminar.setBounds(387, 57, 103, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(386, 92, 89, 23);
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscarPrdoucto();
+			}
+		});
+		btnBuscar.setBounds(386, 92, 104, 23);
 		contentPane.add(btnBuscar);
 		
 		JButton btnActualizar = new JButton("Actualizar");
-		btnActualizar.setBounds(385, 131, 89, 23);
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actulizarProductos();
+			}
+		});
+		btnActualizar.setBounds(385, 131, 105, 23);
 		contentPane.add(btnActualizar);
 		
 		JButton btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nuevoProducto();
+			}
+		});
 		btnLimpiar.setBounds(305, 196, 89, 23);
 		contentPane.add(btnLimpiar);
 		
 		txtCodProducto.setText(ObtenerCodProducto());
 	}
 	
+	/********** Buscar *******/
+	void buscarPrdoucto() {
+		String idProducto = leerIdProd();
+		
+		RegistroProducto rpo = new GestionMantenimiento().buscarProducto(idProducto);
+		
+		if(rpo == null) {
+			JOptionPane.showMessageDialog(this, "Producto "+ idProducto + " No existe");
+		}else {
+			txtCodProducto.setText(rpo.getIdProducto());
+			txtNombreProd.setText(rpo.getNombreProducto());
+			txtPrecioProd.setText(rpo.getPrecioProducto() + "");
+			
+		}
+	}
 	
+	/******************** Eliminar **********************/
+	void eliminarProducto() {
+		String idProducto;
+		idProducto = leerIdProd();
+		
+		int rs = new GestionMantenimiento().eliminarProducto(idProducto);
+		
+		if(rs == 0) {
+			JOptionPane.showMessageDialog(this, "Error al Eliminar Producto");
+		}else {
+			JOptionPane.showMessageDialog(this, "Producto " + idProducto + " a sido Eliminado");
+		}
+	}
 	
+	void registrar() {
+		String idProducto, nombreProducto;
+		double precioProducto;
+		
+		idProducto = leerIdProd();
+		nombreProducto = leerNomProd();
+		precioProducto = leerPrecioProd();
+		
+		RegistroProducto rp = new RegistroProducto();
+		rp.setIdProducto(idProducto);
+		rp.setNombreProducto(nombreProducto);
+		rp.setPrecioProducto(precioProducto);
+		
+		if(idProducto == null || nombreProducto == null || precioProducto == 0) {
+			JOptionPane.showMessageDialog(this, "Ingrese TODOS los datos requeridos");
+			
+		}else {
+			GestionMantenimiento gm = new GestionMantenimiento();
+			int rs = gm.registro(rp);
+			JOptionPane.showMessageDialog(this, "Prodcuto " + "'" + rp.getNombreProducto() + "'" 
+			+ " Registrado");
+			
+			nuevoProducto();
+		}	
+	}
 	
+	void actulizarProductos() {
+		
+	}
+	
+	/******* NUEVO PRODUCTO *******/
+	
+	void nuevoProducto() {
+		txtNombreProd.setText("");
+		txtPrecioProd.setText("");
+		
+		txtCodProducto.setText(ObtenerCodProducto());
+	}
+
+	
+	/******* VALIDACIONES *******/
+	
+	private String leerIdProd() {
+	
+		return txtCodProducto.getText();
+	}
+
+	private String leerNomProd() {
+		
+		if (txtNombreProd.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Nombre de Producto es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!txtNombreProd.getText().matches("^[a-zA-Záéíóú ]{3,50}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Nombre", "Aviso", 2);
+			return null;
+		}
+		
+		return txtNombreProd.getText();
+	}
+	
+
+	private double leerPrecioProd() {
+		
+		if (txtPrecioProd.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Precio es un campo OBLIGATORIO");
+			return 0;
+		}
+		
+		if(!txtPrecioProd.getText().matches("^[0-9]{1,2}+([.][0-9]{1,2})?$")) { 
+
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Precio", "Aviso", 2);
+			return 0;
+		}
+		
+		return Double.parseDouble(txtPrecioProd.getText());
+	}
+
 	/***** Numero de Registro   *********/
 	private String ObtenerCodProducto() {
 		return new GestionMantenimiento().generarCodigoProducto();
