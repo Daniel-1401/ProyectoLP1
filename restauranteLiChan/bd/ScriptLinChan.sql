@@ -114,11 +114,12 @@ CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_empleado` (
   `genero` VARCHAR(5) NOT NULL,
   `estado` VARCHAR(8) NOT NULL DEFAULT 'activo',
   `idUsuario` INT NOT NULL,
-  PRIMARY KEY (`idEmpleado`),
+   PRIMARY KEY (`idEmpleado`),
   INDEX `fk_tbEmpleado_tbCargo:idCargo_idx` (`idCargo` ASC) ,
   UNIQUE INDEX `numeroDocumento_UNIQUE` (`numeroDocumento` ASC) ,
   INDEX `fk_tbEmpleado_tbTipoDocumento:idTipoDocumento_idx` (`idTipoDocumento` ASC) ,
   INDEX `fk_tbEmpleado_tbUsuarios:idUsuarios_idx` (`idUsuario` ASC) ,
+  UNIQUE INDEX `idUsuario_UNIQUE` (`idUsuario` ASC) ,
   CONSTRAINT `fk_tbEmpleado_tbCargo:idCargo`
     FOREIGN KEY (`idCargo`)
     REFERENCES `RestauranteLiChan`.`tb_cargo` (`idCargo`)
@@ -336,6 +337,10 @@ INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0003',4,38.00);
 ----- PROCEDIMIENTOS -----
 --------------------------
 
+
+---------------------
+-- REGISTRAR EMPLEADO
+---------------------
 DELIMITER $$
 CREATE PROCEDURE ins_empleadoUsuario(
 	`idEmpleado` 		VARCHAR(10),
@@ -357,8 +362,62 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,''men','activo',0006,'login','contraseña');
+-- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,'men','activo',0006,'login','contraseña');
 
+
+--------------------
+-- ELIMINAR USUARIO
+--------------------
+
+DELIMITER $$
+CREATE PROCEDURE del_Empleado(
+	`codigoEmpleado` 	VARCHAR(10)
+)
+BEGIN 
+    DELETE 
+		`tb_empleado`,
+        `tb_usuarios`
+	FROM `tb_empleado`
+	INNER JOIN `tb_usuarios` ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
+    WHERE `tb_empleado`.`idEmpleado` = `codigoEmpleado`;
+END $$
+DELIMITER ;
+
+-- CALL del_Empleado ('R0004')
+
+
+--------------------
+-- ACTUALIZAR USUARIO
+--------------------
+
+DELIMITER $$ 
+CREATE PROCEDURE upd_Empleado(
+	`idEmpleado` 		VARCHAR(10),
+	`nombreEmpleado` 	VARCHAR(45),
+	`apellidoEmpleado` 	VARCHAR(45),
+	`estado` 			VARCHAR(8),
+	`password` 			CHAR(20)
+)
+BEGIN 
+	UPDATE `tb_empleado`
+    INNER JOIN `tb_usuarios` ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
+	SET `tb_empleado`.`nombreEmpleado`=`nombreEmpleado`,
+		`tb_empleado`.`apellidoEmpleado`=`apellidoEmpleado`,
+        `tb_empleado`.`estado`=`estado`,
+        `tb_usuarios`.`password`=`password`
+	WHERE `tb_empleado`.`idEmpleado` = `idEmpleado`;
+END $$
+DELIMITER ;
+
+-- CALL upd_Empleado('R0004','SETCH','ELADMIN','inactivo','password');
+
+
+SELECT SUBSTRING(MAX(`tb_empleado`.`idEmpleado`),2) FROM `tb_empleado` WHERE `tb_empleado`.`idCargo` = 2
+
+
+--------------------
+-- ACCEDER USUARIO
+--------------------
 DELIMITER $$
 CREATE PROCEDURE accessUser(
 	`user` VARCHAR(15),
@@ -378,15 +437,27 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL accessUser("AD01", "ADMIN01");
+-- CALL accessUser("AD01", "ADMIN01");
 
 
 /*  ACTUALIZAR CLIENTE*/
 delimiter $$
-create procedure usp_actulizaCliente(id varchar(10), nom varchar(45), ape varchar(45), direc varchar(45), telef int, tipo int, doc varchar(12))
+create procedure upd_actulizaCliente(
+	id varchar(10),
+    nom varchar(45),
+    ape varchar(45),
+    direc varchar(45),
+    telef int,
+    tipo int,
+    doc varchar(12))
 begin 
-	update tb_clientes set nombreCliente=nom,apellidoCliente=ape,direccionCliente=direc,
-											numeroTelefonico=telef,idtipoDocumento=tipo,numeroDocumento=doc
+	update tb_clientes 
+		set nombreCliente=nom,
+			apellidoCliente=ape,
+            direccionCliente=direc,
+            numeroTelefonico=telef,
+            idtipoDocumento=tipo,
+            numeroDocumento=doc
     where idCliente = id;
 end $$
 delimiter ;
