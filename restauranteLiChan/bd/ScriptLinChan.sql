@@ -379,3 +379,14 @@ END $$
 DELIMITER ;
 
 CALL accessUser("AD01", "ADMIN01");
+
+
+/*  ACTUALIZAR CLIENTE*/
+delimiter $$
+create procedure usp_actulizaCliente(id varchar(10), nom varchar(45), ape varchar(45), direc varchar(45), telef int, tipo int, doc varchar(12))
+begin 
+	update tb_clientes set nombreCliente=nom,apellidoCliente=ape,direccionCliente=direc,
+											numeroTelefonico=telef,idtipoDocumento=tipo,numeroDocumento=doc
+    where idCliente = id;
+end $$
+delimiter ;
