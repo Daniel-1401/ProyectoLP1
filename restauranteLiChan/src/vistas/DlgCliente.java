@@ -132,7 +132,7 @@ public class DlgCliente extends JDialog {
 		FrmBoleta.txtNomCliente.setText(tblSalida.getValueAt(fila, 0).toString());
 		FrmBoleta.txtidCliente.setText(tblSalida.getValueAt(fila, 1).toString());
 		FrmBoleta.txtDireccion.setText(tblSalida.getValueAt(fila, 2).toString());
-		FrmBoleta.txtFelefono.setText(tblSalida.getValueAt(fila, 3).toString());
+		FrmBoleta.txtTelefono.setText(tblSalida.getValueAt(fila, 3).toString());
 		FrmBoleta.txtDocumento.setText(tblSalida.getValueAt(fila, 4)+"");
 		dispose();
 		FrmBoleta.btnConsultarProducto.setEnabled(true);

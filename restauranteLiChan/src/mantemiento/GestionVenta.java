@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import interfaces.VentasInterface;
+import modelos.Boleta;
+import modelos.BoletaDetalle;
 import modelos.ProductosSeleccionados_Temporal;
 import utils.ConectorBD;
 
@@ -204,5 +206,61 @@ public class GestionVenta implements VentasInterface {
 			}
 		}
 	return idEmpleado;
+	}
+
+	@Override
+	public int registrarBoleta(Boleta b) {
+		int ok = 0;
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "CALL ins_Boleta(?,?,?,?)";
+			ejecutor = conexion.prepareStatement(sentencia);
+			ejecutor.setString(1, b.getIdBoleta());
+			ejecutor.setString(2, b.getFecha());
+			ejecutor.setString(3, b.getIdCliente());
+			ejecutor.setString(4, b.getIdRecepcionista());
+			ok = ejecutor.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("ERROR AL REGISTRAR BOLETA: " + e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException se) {
+				System.out.println("ERROR AL CERRAR LA CONEXION : " + se.getMessage());
+			}
+		}
+		return ok;
+	}
+
+	@Override
+	public int registrarBoletaDetalle(BoletaDetalle bd) {
+		int ok = 0;
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "CALL ins_DetalleBoleta(?,?,?,?);";
+			ejecutor = conexion.prepareStatement(sentencia);
+			ejecutor.setString(1, bd.getIdBoleta());
+			ejecutor.setString(2, bd.getIdProducto());
+			ejecutor.setInt(3, bd.getCantidadProducto());
+			ejecutor.setDouble(4, bd.getPrecioTotalProducto());			
+			ok = ejecutor.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("ERROR AL REGISTRAR BOLETA DETALLE: " + e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException se) {
+				System.out.println("ERROR AL CERRAR LA CONEXION : " + se.getMessage());
+			}
+		}
+		return ok;
 	}
 }

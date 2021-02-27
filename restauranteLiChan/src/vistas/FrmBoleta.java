@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -17,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import mantemiento.GestionMantenimiento;
 import mantemiento.GestionVenta;
+import modelos.Boleta;
+import modelos.BoletaDetalle;
 import modelos.DetalleBoleta;
 import modelos.ProductosSeleccionados_Temporal;
 
@@ -33,7 +36,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
-public class FrmBoleta extends JFrame implements ActionListener {
+public class FrmBoleta extends JInternalFrame  {
 
 	private JPanel contentPane;
 	private JTextField txtNumBoleta;
@@ -41,7 +44,7 @@ public class FrmBoleta extends JFrame implements ActionListener {
 	private JTextField txtTotal;
 	public static JTextField txtNomCliente;
 	public static JTextField txtidCliente;
-	public static JTextField txtFelefono;
+	public static JTextField txtTelefono;
 	public static JTextField txtDocumento;
 	public static JTextField txtDireccion;
 	public static JTextField txtCantidad;
@@ -77,10 +80,10 @@ public class FrmBoleta extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public FrmBoleta() {
-		setUndecorated(true);
+		//setUndecorated(true);
 		setBackground(Color.RED);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 735, 565);
+//		setBounds(100, 100, 735, 565);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,11 +141,11 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		panelDatosCliente.add(txtidCliente);
 		txtidCliente.setColumns(10);
 		
-		txtFelefono = new JTextField();
-		txtFelefono.setEditable(false);
-		txtFelefono.setBounds(70, 64, 153, 20);
-		panelDatosCliente.add(txtFelefono);
-		txtFelefono.setColumns(10);
+		txtTelefono = new JTextField();
+		txtTelefono.setEditable(false);
+		txtTelefono.setBounds(70, 64, 153, 20);
+		panelDatosCliente.add(txtTelefono);
+		txtTelefono.setColumns(10);
 		
 		txtDocumento = new JTextField();
 		txtDocumento.setEditable(false);
@@ -321,12 +324,16 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		contentPane.add(lblTotalVenta);
 		
 		btnImprimir = new JButton("Imprimir");
-		btnImprimir.addActionListener(this);
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generarComprobante();
+			}
+		});
 		btnImprimir.setEnabled(false);
 		btnImprimir.setBounds(307, 454, 89, 23);
 		contentPane.add(btnImprimir);
 		
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		
 		txtNumBoleta.setText(obtenerNumBoleta());
 		txtFecha.setText(obtenerFecha());
@@ -352,6 +359,7 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		tblProductosSeleccionados = new JTable();
 		tblProductosSeleccionados.setModel(modelo);
 		modelo.addColumn("idItem");
+		modelo.addColumn("codProducto");
 		modelo.addColumn("descripcion");
 		modelo.addColumn("cantidad");
 		modelo.addColumn("precioUnd");
@@ -368,7 +376,7 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		txtIdRecepcionista.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtIdRecepcionista.setColumns(10);
 		txtIdRecepcionista.setBounds(587, 99, 108, 20);
-		txtIdRecepcionista.setText(obtenerIdRecepcionista(3));
+		txtIdRecepcionista.setText(obtenerIdRecepcionista(frmLogin.user.getIdUsuario()));
 		contentPane.add(txtIdRecepcionista);
 		
 	}
@@ -397,7 +405,6 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		precioUnitProducto = leerPrecio();
 		totalProductoSeleccionado = (cantidadProducto * precioUnitProducto);
 		nombreProducto = leerNomProd();
-		System.out.println(totalProductoSeleccionado);
 		ProductosSeleccionados_Temporal nuevo = new ProductosSeleccionados_Temporal(numeroItem, idBoleta, idCliente, idProducto, cantidadProducto, totalProductoSeleccionado, nombreProducto, precioUnitProducto);
 		int rs = new GestionVenta().insertarProductosSeleccionadosTemporal(nuevo,numeroItem);
 		if(rs == 0) {
@@ -436,11 +443,53 @@ public class FrmBoleta extends JFrame implements ActionListener {
 		ArrayList<ProductosSeleccionados_Temporal> lstProductosTemporal = new GestionVenta().lstProductosSeleccionados();
 		modelo.setRowCount(0);
 		for(ProductosSeleccionados_Temporal pt : lstProductosTemporal) {
-			Object datos[] = {pt.getNumItem(), pt.getNombreProducto(),pt.getCantidadProducto(), pt.getPrecioUnitProducto(), pt.getTotalProductoSeleccionado()};
+			Object datos[] = {pt.getNumItem(), pt.getIdProducto(), pt.getNombreProducto(),pt.getCantidadProducto(), pt.getPrecioUnitProducto(), pt.getTotalProductoSeleccionado()};
 			modelo.addRow(datos);
 		}
 	}
 	
+	private void generarComprobante() {
+		String idBoleta = leerNroBoleta();
+		String fecha	= obtenerFecha();
+		String idCliente = leerIdCli();
+		String idRecepcionista = leerIdRecep();
+		String idProducto;
+		int cantidadProducto;
+		double precioTotalProducto;
+		
+		Boleta nuevaBoleta = new Boleta(idBoleta, fecha, idCliente, idRecepcionista);
+		int resultadoBoleta = new GestionVenta().registrarBoleta(nuevaBoleta);
+		if(resultadoBoleta == 0) {
+			JOptionPane.showMessageDialog(this, "ERROR AL REGISTRAR NUEVA BOLETA");
+		}else {
+			
+			for (int i = 0; i < tblProductosSeleccionados.getRowCount(); i++) {
+				idProducto = tblProductosSeleccionados.getValueAt(i, 1).toString();
+				cantidadProducto = Integer.parseInt(tblProductosSeleccionados.getValueAt(i, 3).toString());
+				precioTotalProducto = Double.parseDouble(tblProductosSeleccionados.getValueAt(i, 5).toString());
+				BoletaDetalle nuevoBoletaDetalle = new BoletaDetalle(idBoleta, idProducto, cantidadProducto, precioTotalProducto);
+				int resultadoBoletaDetalle = new GestionVenta().registrarBoletaDetalle(nuevoBoletaDetalle);
+				if(resultadoBoletaDetalle == 0) {
+					JOptionPane.showMessageDialog(this, "ERROR AL REGISTRAR NUEVA BOLETA DETALLE");
+				}
+			}
+			txtNomCliente.setText("");
+			txtidCliente.setText("");
+			txtTelefono.setText("");
+			txtDocumento.setText("");
+			txtDireccion.setText("");
+			txtNomProducto.setText("");
+			txtCodProduccto.setText("");
+			txtPrecioProducto.setText("");
+			txtCantidad.setText("");
+			txtTotal.setText(0.0+"");
+			btnConsultarProducto.setEnabled(false);
+			btnAgregar.setEnabled(false);
+			btnEliminarProducto.setEnabled(false);
+			btnImprimir.setEnabled(false);
+			JOptionPane.showMessageDialog(this, "BOLETA REGISTRADA");
+		}
+	}
 	
 	private String obtenerNumBoleta() {		
 		
@@ -466,9 +515,11 @@ public class FrmBoleta extends JFrame implements ActionListener {
 	private String leerIdCli() {
 		return txtidCliente.getText();
 	}
-	
+	private String leerIdRecep() {
+		return txtIdRecepcionista.getText();
+	}
 	private int leerTelefono() {
-		return Integer.parseInt(txtFelefono.getText());
+		return Integer.parseInt(txtTelefono.getText());
 	}
 	
 	private String leerDocumento() {
@@ -508,12 +559,7 @@ public class FrmBoleta extends JFrame implements ActionListener {
 	private String leerNroBoleta() {
 		return txtNumBoleta.getText();
 	}
-	public void actionPerformed(ActionEvent arg0) {
-		if (arg0.getSource() == btnImprimir) {
-			actionPerformedBtnImprimir(arg0);
-		}
-	}
-	protected void actionPerformedBtnImprimir(ActionEvent arg0) {
-		
-	}
+	
+	
+	
 }

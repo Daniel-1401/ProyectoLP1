@@ -185,10 +185,12 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `RestauranteLiChan`.`tb_boleta_detalle` ;
 
 CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_boleta_detalle` (
+  `idBoletaDetalle` INT NOT NULL AUTO_INCREMENT,
   `idBoleta` VARCHAR(10) NOT NULL,
   `idProducto` VARCHAR(10) NOT NULL,
   `cantidadProducto` INT NOT NULL,
   `precioTotalProducto` DECIMAL(8,2) NOT NULL,
+  PRIMARY KEY (`idBoletaDetalle`),
   INDEX `fk_DetalleCompraProducos_tbProducto:idProducto_idx` (`idProducto` ASC) ,
   CONSTRAINT `fk_tbBoletaDetalle_tbProducto:idProducto`
     FOREIGN KEY (`idProducto`)
@@ -333,16 +335,16 @@ INSERT INTO `tb_boleta` VALUES('B0005','2021-02-01','C0002','R0001');
 -- DATOS TB_BOLETA
 -- ------------------------
 
-INSERT INTO `tb_boleta_detalle` VALUES('B0001','P0001',2,18.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0001','P0002',1,08.50);
-INSERT INTO `tb_boleta_detalle` VALUES('B0002','P0005',2,46.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0002','P0004',1,26.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0003','P0005',3,69.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0004','P0003',2,19.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0005',5,115.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0001',2,18.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0004',3,75.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0003',4,38.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0001','P0001',2,18.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0001','P0002',1,08.50);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0002','P0005',2,46.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0002','P0004',1,26.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0003','P0005',3,69.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0004','P0003',2,19.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0005','P0005',5,115.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0005','P0001',2,18.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0005','P0004',3,75.00);
+INSERT INTO `tb_boleta_detalle` VALUES(null,'B0005','P0003',4,38.00);
 
 
 -- ------------------------
@@ -622,12 +624,13 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL get_IdRecepcionista (3);
+-- CALL get_IdRecepcionista (3);
+
+
 
 		-- ------------------
 		-- REGISTRAR BOLETA
 		-- ------------------
-
 
 DELIMITER $$
 CREATE PROCEDURE ins_Boleta(
@@ -637,22 +640,39 @@ CREATE PROCEDURE ins_Boleta(
   `idRecepcionista` VARCHAR(10)
 )
 BEGIN 
-	SELECT sum(`tb_clienteproducto_temporal`.`TotalProductoSeleccinado`)
-		FROM `tb_clienteproducto_temporal`
-	WHERE `tb_clienteproducto_temporal`.`idCliente` = `idCliente`;
+	INSERT INTO `tb_boleta` 
+		VALUES( `idBoleta`		 ,
+				`fecha`			 ,
+				`idCliente` 	 ,
+				`idRecepcionista`);
 END $$
 DELIMITER ;
 
+--  CALL ins_Boleta('B0010','2020/04/17','C0003','R0003');
 		-- ------------------------
 		-- REGISTRAR DETALLE BOLETA
 		-- ------------------------
 
+DELIMITER $$
+CREATE PROCEDURE ins_DetalleBoleta(
+  `idBoleta` 			VARCHAR(10) ,
+  `idProducto` 			VARCHAR(10) ,
+  `cantidadProducto` 	INT ,
+  `precioTotalProducto` DECIMAL(8,2)
+)
+BEGIN 
+	INSERT INTO `tb_boleta_detalle` 
+		VALUES( null				 ,
+				`idBoleta`		 	 ,
+				`idProducto`		 ,
+				`cantidadProducto` 	 ,
+				`precioTotalProducto`);
+END $$
+DELIMITER ;
 
-
-  `idBoleta` VARCHAR(10) NOT NULL,
-  `idProducto` VARCHAR(10) NOT NULL,
-  `cantidadProducto` INT NOT NULL,
-  `precioTotalProducto` DECIMAL(8,2) NOT NULL,
+-- CALL ins_DetalleBoleta('B0010','P0002',2,9.0);
+-- CALL ins_DetalleBoleta('B0010','P0004',2,26.0);
+-- CALL ins_DetalleBoleta('B0010','P0002',3,17.5);
 
 		-- ------------------
 		-- ACCEDER USUARIO

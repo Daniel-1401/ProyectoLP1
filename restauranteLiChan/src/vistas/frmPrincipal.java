@@ -331,7 +331,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 				ajustarPanelContenidoNormal();
 				MenuItem(btnVenta, false);
 				FrmBoleta frm = new FrmBoleta();
-				frm.setBounds(100, 100, 735, 565);
+				frm.setBounds(20, 50, 735, 565);
 				panelContenedor.add(frm);
 				frm.setVisible(true);
 				
