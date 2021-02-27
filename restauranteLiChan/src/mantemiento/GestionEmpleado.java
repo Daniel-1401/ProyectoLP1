@@ -317,4 +317,6 @@ public class GestionEmpleado implements EmpleadoInterface{
 		}
 		return codigo;
 	}
+
+	
 }

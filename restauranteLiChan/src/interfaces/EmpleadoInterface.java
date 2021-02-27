@@ -22,4 +22,6 @@ public interface EmpleadoInterface {
 	public ArrayList<TipoDocumento> listadoTipoDocumento();
 	public ArrayList<TipoCargo> listadoTipoCargo();
 	public String generarCodigo(int cargo);
+	
+	
 }

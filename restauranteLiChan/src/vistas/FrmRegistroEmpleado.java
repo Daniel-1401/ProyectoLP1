@@ -7,16 +7,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
+
+import com.itextpdf.text.xml.XmlToTxt;
 import com.toedter.calendar.JDateChooser;
 
-public class FrmRegistroEmpleado extends JInternalFrame implements ActionListener {
+import mantemiento.GestionEmpleado;
+import mantemiento.GestionMantenimiento;
+import modelos.TipoDocumento;
+
+public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionListener {
 	private JButton btnCerrar;
 	private JLabel lblCodigo;
 	private JLabel lblNombres;
@@ -145,6 +155,7 @@ public class FrmRegistroEmpleado extends JInternalFrame implements ActionListene
 		getContentPane().add(lblContrasea);
 		
 		txtCodigo = new JTextField();
+		txtCodigo.setText("A/R0001");
 		txtCodigo.setBounds(220, 83, 150, 20);
 		getContentPane().add(txtCodigo);
 		txtCodigo.setColumns(10);
@@ -275,8 +286,9 @@ public class FrmRegistroEmpleado extends JInternalFrame implements ActionListene
 				getContentPane().add(btnRegistrar);
 				break;
 		}
-
 		
+		txtCodigo.setText(ObtenerCodEmpleado());
+		listadoCombo();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -309,6 +321,19 @@ public class FrmRegistroEmpleado extends JInternalFrame implements ActionListene
 	protected void actionPerformedBtnBuscar(ActionEvent arg0) {
 	}
 	protected void actionPerformedbtnRegistrar(ActionEvent arg0) {
+		leerNombre();
+		leerApellido();
+		leerCodigo();
+		leerTipoDocumento();
+		leerFecha();
+		leerGenero();
+		leerUsuario(); 
+		leerNumDoc();
+		leerContra();
+		leerSueldo();
+		leerPagoHora();
+		leerHorasLab();
+		leerDiasLab();
 	}
 	protected void actionPerformedbtnNuevoRegistro(ActionEvent arg0) {
 		dispose();
@@ -319,4 +344,203 @@ public class FrmRegistroEmpleado extends JInternalFrame implements ActionListene
 		frm.setVisible(true);
 		
 	}
+	
+	/******************************
+	 * 
+	 */
+	
+	/***** Numero de Registro   *********/
+	private String ObtenerCodEmpleado() {
+
+		return new GestionEmpleado().generarCodigo(OpcionEmpleado);
+	}
+	
+	/******* COMBO *******/
+	void listadoCombo() {
+		ArrayList<TipoDocumento> lstTdocumento = new GestionMantenimiento().listadoDeDocumento();
+		
+		cboTipoDocumento.addItem("--> Seleccione");
+		for (TipoDocumento td : lstTdocumento) {
+			cboTipoDocumento.addItem(td.getIdTipoDocumento() + ".- " + td.getDescripcion());
+		}
+	}
+	
+	private String leerCodigo() {
+
+		return txtCodigo.getText();
+	}
+	
+	private String leerNombre() {
+		if (txtNombres.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Nombre es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!txtNombres.getText().matches("^[a-zA-Záéíóú ]{3,50}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Nombre", "Aviso", 2);
+			return null;
+		}
+		
+		
+		return txtNombres.getText();
+	}
+	
+	private String leerApellido() {
+		
+		if (txtApellidos.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Apellido es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!txtApellidos.getText().matches("^[a-zA-Záéíóú ]{3,50}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Apellido", "Aviso", 2);
+			return null;
+		}
+		
+		return txtApellidos.getText();
+	}
+	
+	private int leerTipoDocumento() {
+		if (cboTipoDocumento.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(this, "Seleccione un Tipo de Documento", "Aviso",2);
+			return 0;
+		}
+		return cboTipoDocumento.getSelectedIndex();
+	}
+	
+	private String leerNumDoc() {
+		
+		if (txtNroDocumento.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "El número de Documento es un campo OBLIGATORIO");
+			return null;
+			
+		}else {
+			switch (cboTipoDocumento.getSelectedItem() + "" ) {
+			
+			case "DNI": {
+				if(!txtNroDocumento.getText().matches("^[0-9]{​​​​​8}​​​​​​$")) {
+					JOptionPane.showMessageDialog(this, "DNI incorrecto", "Aviso", 2);
+					return null;
+				}
+			}
+			case "PASAPORTE":
+				if(!txtNroDocumento.getText().matches("^[A-Z]{​​​​​1}​​​​​​[0-9]$")) {
+					JOptionPane.showMessageDialog(this, "Pasaporte Incorrecto", "Aviso", 2);
+					return null;
+				}
+			}
+		}
+		
+		return txtNroDocumento.getText();
+	}
+	
+	private String leerFecha() {
+		
+		if(dtFecha.getDate() == null){
+			JOptionPane.showMessageDialog(this, "Seleccione fecha es obligatorio", "Alerta", 2);
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd"); 
+		return sdf.format(dtFecha.getDate());
+	}
+	
+	private String leerGenero() {
+		
+		if (txtGenero.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Genero es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!txtGenero.getText().matches("^[a-zA-Záéíóú ]{3,50}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Genero", "Aviso", 2);
+			return null;
+		}
+		
+		return txtGenero.getText();
+	}
+	
+	private String leerUsuario() {
+		
+		if (txtUsuario.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Usuario es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!txtUsuario.getText().matches("^[A-Z0-9]{​​​​​4}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Usuario", "Aviso", 2);
+			return null;
+		}
+		
+		return txtUsuario.getText();
+
+	}
+	
+	private String leerContra() {
+		
+		if (String.valueOf(passwordField.getPassword()).length()==0) {
+			JOptionPane.showMessageDialog(this, "Contraseña es un campo OBLIGATORIO");
+			return null;
+		}
+		
+		if(!String.valueOf(passwordField.getPassword()).matches("^[A-Z0-9]{​​​​​7}$")) { 
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Contraseña", "Aviso", 2);
+			return null;
+		}
+		
+		return String.valueOf(passwordField.getPassword());
+	}
+	
+	private double leerSueldo() {
+		if (txtSueldo.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Sueldo es un campo OBLIGATORIO");
+			return 0;
+		}
+		
+		if(!txtSueldo.getText().matches("^[0-9]{1,2}+([.][0-9]{1,2})?$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en el Sueldo", "Aviso", 2);
+			return 0;
+		}
+		return Double.parseDouble(txtSueldo.getText());
+	}
+	
+	private double leerPagoHora(){
+		if (txtPagoPorHora.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Pago Por Hora es un campo OBLIGATORIO");
+			return 0;
+		}
+		
+		if(!txtPagoPorHora.getText().matches("^[0-9]{1,2}+([.][0-9]{1,2})?$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en el Pago Por Hora", "Aviso", 2);
+			return 0;
+		}
+		return Double.parseDouble(txtPagoPorHora.getText());
+	}
+	
+	private int leerHorasLab(){
+		if (txtNumHorasPorDia.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Horas Por Dia es un campo OBLIGATORIO");
+			return 0;
+		}
+		
+		if(!txtNumHorasPorDia.getText().matches("^[0-9]{2}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en el Horas Por Dia", "Aviso", 2);
+			return 0;
+		}
+		return Integer.parseInt(txtNumHorasPorDia.getText());
+	}
+	
+	private int leerDiasLab(){
+		
+		if (txtDiasLaborales.getText().length()==0) {
+			JOptionPane.showMessageDialog(this, "Dias Laborales es un campo OBLIGATORIO");
+			return 0;
+		}
+		
+		if(!txtDiasLaborales.getText().matches("^[0-9]{2}$")) {
+			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Dias Laborales", "Aviso", 2);
+			return 0;
+		}
+		return Integer.parseInt(txtDiasLaborales.getText());
+	}
+	
 }
