@@ -33,4 +33,11 @@ public interface MantenimientoInterface {
 	public RegistroProducto buscarProducto (String idProducto);
 	
 	public int actulizarProducto(RegistroCliente r); 
+	
+	
+	/************** Boleta *******************/
+	
+	public String generaNumeroBoleta();
+	
+	
 }
