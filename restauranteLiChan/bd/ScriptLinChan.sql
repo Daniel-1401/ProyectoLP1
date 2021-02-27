@@ -3,10 +3,6 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
 -- -----------------------------------------------------
 -- Schema RestauranteLiChan
 -- -----------------------------------------------------
@@ -230,6 +226,7 @@ DROP TABLE IF EXISTS `RestauranteLiChan`.`tb_ClienteProducto_Temporal` ;
 
 CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_ClienteProducto_Temporal` (
   `idTemporal` INT NOT NULL AUTO_INCREMENT,
+  `numItem`	INT NOT NULL,
   `idBoleta` VARCHAR(45) NOT NULL,
   `idCliente` VARCHAR(45) NOT NULL,
   `idProducto` VARCHAR(45) NOT NULL,
@@ -240,10 +237,8 @@ CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_ClienteProducto_Temporal` (
   PRIMARY KEY (`idTemporal`))
 ENGINE = InnoDB;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_SAFE_UPDATES=0;
 
 -- ------------------------
 -- DATOS TB_CARGO
@@ -489,7 +484,7 @@ BEGIN
 END $$
 DELIMITER ;
 /*PRUEBA*/
- -- CALL upd_EmpleadoRECEP('R0004','SETCH','ELRECEP','activo','password',9,9,99);
+--  CALL upd_EmpleadoRECEP('R0004','SETCH','ELRECEP','activo','password',9,9,99);
  
 
 		-- ------------------
@@ -545,6 +540,7 @@ INNER JOIN `tb_usuarios` 	  ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuari
 		-- -------------------------------------------
 DELIMITER $$
 CREATE PROCEDURE ins_productoClienteTemporal(
+  `numItem`						INT,
   `idBoleta` 					VARCHAR(45),
   `idCliente` 					VARCHAR(45),
   `idProducto` 					VARCHAR(45),
@@ -555,7 +551,9 @@ CREATE PROCEDURE ins_productoClienteTemporal(
 )
 BEGIN 
 	INSERT INTO `tb_clienteproducto_temporal` 
-		values	(`idBoleta` 				,
+		values	(null,
+				 `numItem`					,
+				 `idBoleta` 				,
 				 `idCliente` 				,
 				 `idProducto` 				,
 				 `CantidadProducto` 		,
@@ -565,20 +563,96 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL ins_productoClienteTemporal(`idBoleta`,  `idCliente`,`idProducto`,`CantidadProducto`,`TotalProductoSeleccinado`,`NombreProducto`,`PrecioUnitProducto`)
--- SELECT * FROM `tb_ClienteProducto_Temporal`
+        -- ----------------------------------------------------
+		-- ELIMINAR PRODUCTO SELCCIONADO DEL CLIENTE (TEMPORAL)
+		-- -----------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE del_productoClienteTemporal(
+    `idCliente` 					VARCHAR(45),
+	`numItem`						INT
+)
+BEGIN 
+	delete  `tb_clienteproducto_temporal` 
+		from `tb_clienteproducto_temporal` 
+    where `tb_clienteproducto_temporal`.`idCliente` = `idCliente` AND `tb_clienteproducto_temporal`.`numItem`=`numItem`;
+END $$
+DELIMITER ;
+
+        -- -------------------------------------------------
+		-- SUMA TOTAL DE PRODUCTOS SELCCIONADOS DEL CLIENTE 
+		-- -------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE sum_TotalproductoClienteTemporal(
+    `idCliente` 					VARCHAR(45)
+)
+BEGIN 
+	SELECT sum(`tb_clienteproducto_temporal`.`TotalProductoSeleccinado`)
+		FROM `tb_clienteproducto_temporal`
+	WHERE `tb_clienteproducto_temporal`.`idCliente` = `idCliente`;
+END $$
+DELIMITER ;
+
+
+--  CALL ins_productoClienteTemporal(1,'B0006','C0001','P0002',2,18.00,'PRUDCTO2',9);
+--  CALL ins_productoClienteTemporal(2,'B0006','C0001','P0002',2,18.00,'PRUDCTO2',9);
+--  CALL ins_productoClienteTemporal(1,'B0006','C0002','P0002',2,18.00,'PRUDCTO2',9);
+--  CALL ins_productoClienteTemporal(2,'B0006','C0002','P0005',2,18.00,'PRUDCTO2',9);
+--  CALL ins_productoClienteTemporal(3,'B0006','C0002','P0003',2,18.00,'PRUDCTO2',9);
+--  SELECT * FROM `tb_ClienteProducto_Temporal`;
+--  CALL del_productoClienteTemporal('C0001',2);
+--  CALL del_productoClienteTemporal('C0004',1);
+--  CALL sum_TotalproductoClienteTemporal('C0001');
+
+
+		-- ------------------------
+		-- OBTENER ID RECEPCIONISTA
+		-- ------------------------
+
+DELIMITER $$
+CREATE PROCEDURE get_IdRecepcionista(
+    `idUsuario` 					INT
+)
+BEGIN 
+	SELECT `tb_empleado`.`idEmpleado`
+		FROM `tb_empleado`
+	INNER JOIN `tb_usuarios` on `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
+	WHERE `tb_usuarios`.`idUsuario` = `idUsuario`;
+END $$
+DELIMITER ;
+
+CALL get_IdRecepcionista (3);
 
 		-- ------------------
 		-- REGISTRAR BOLETA
 		-- ------------------
 
 
+DELIMITER $$
+CREATE PROCEDURE ins_Boleta(
+  `idBoleta` 		VARCHAR(10),
+  `fecha`			DATE,
+  `idCliente` 		VARCHAR(10),
+  `idRecepcionista` VARCHAR(10)
+)
+BEGIN 
+	SELECT sum(`tb_clienteproducto_temporal`.`TotalProductoSeleccinado`)
+		FROM `tb_clienteproducto_temporal`
+	WHERE `tb_clienteproducto_temporal`.`idCliente` = `idCliente`;
+END $$
+DELIMITER ;
+
+		-- ------------------------
+		-- REGISTRAR DETALLE BOLETA
+		-- ------------------------
 
 
 
-
-
-
+  `idBoleta` VARCHAR(10) NOT NULL,
+  `idProducto` VARCHAR(10) NOT NULL,
+  `cantidadProducto` INT NOT NULL,
+  `precioTotalProducto` DECIMAL(8,2) NOT NULL,
 
 		-- ------------------
 		-- ACCEDER USUARIO

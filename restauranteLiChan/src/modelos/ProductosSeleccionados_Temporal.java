@@ -1,6 +1,7 @@
 package modelos;
 
 public class ProductosSeleccionados_Temporal {
+	  private int numItem;
 	  private String idBoleta;
 	  private String idCliente;
 	  private String idProducto;
@@ -9,6 +10,13 @@ public class ProductosSeleccionados_Temporal {
 	  private String NombreProducto;
 	  private double PrecioUnitProducto;
 	
+	
+	public int getNumItem() {
+		return numItem;
+	}
+	public void setNumItem(int numItem) {
+		this.numItem = numItem;
+	}
 	public String getIdBoleta() {
 		return idBoleta;
 	}
@@ -33,11 +41,11 @@ public class ProductosSeleccionados_Temporal {
 	public void setCantidadProducto(int cantidadProducto) {
 		CantidadProducto = cantidadProducto;
 	}
-	public double gettotalProductoSeleccionado() {
+	public double getTotalProductoSeleccionado() {
 		return totalProductoSeleccionado;
 	}
-	public void settotalProductoSeleccionado(double totalProductoSeleccionado) {
-		totalProductoSeleccionado = totalProductoSeleccionado;
+	public void setTotalProductoSeleccionado(double totalProductoSeleccionado) {
+		this.totalProductoSeleccionado = totalProductoSeleccionado;
 	}
 	public String getNombreProducto() {
 		return NombreProducto;
@@ -51,14 +59,17 @@ public class ProductosSeleccionados_Temporal {
 	public void setPrecioUnitProducto(double precioUnitProducto) {
 		PrecioUnitProducto = precioUnitProducto;
 	}
-	public ProductosSeleccionados_Temporal(String idBoleta, String idCliente, String idProducto,
+	
+	
+	public ProductosSeleccionados_Temporal(int numItem, String idBoleta, String idCliente, String idProducto,
 			int cantidadProducto, double totalProductoSeleccionado, String nombreProducto, double precioUnitProducto) {
 		super();
+		this.numItem = numItem;
 		this.idBoleta = idBoleta;
 		this.idCliente = idCliente;
 		this.idProducto = idProducto;
 		CantidadProducto = cantidadProducto;
-		totalProductoSeleccionado = totalProductoSeleccionado;
+		this.totalProductoSeleccionado = totalProductoSeleccionado;
 		NombreProducto = nombreProducto;
 		PrecioUnitProducto = precioUnitProducto;
 	}

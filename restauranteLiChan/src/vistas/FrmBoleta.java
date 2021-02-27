@@ -33,12 +33,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
-public class FrmBoleta extends JFrame {
+public class FrmBoleta extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txtNumBoleta;
 	private JTextField txtFecha;
-	private JTable tblListadoDetalleBoleta;
 	private JTextField txtTotal;
 	public static JTextField txtNomCliente;
 	public static JTextField txtidCliente;
@@ -51,6 +50,11 @@ public class FrmBoleta extends JFrame {
 	public static JTextField txtCodProduccto;
 	public static JButton btnConsultarProducto;
 	public static JButton btnAgregar;
+	private JButton btnImprimir;
+	private JTable tblProductosSeleccionados;
+	private JScrollPane scrollPane;
+	private JButton btnEliminarProducto;
+
 	DefaultTableModel modelo = new DefaultTableModel();
 
 	/**
@@ -179,7 +183,7 @@ public class FrmBoleta extends JFrame {
 		
 		JLabel lblFecha = new JLabel("Fecha:");
 		lblFecha.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFecha.setBounds(306, 99, 125, 23);
+		lblFecha.setBounds(306, 99, 55, 23);
 		contentPane.add(lblFecha);
 		
 		txtNumBoleta = new JTextField();
@@ -193,7 +197,7 @@ public class FrmBoleta extends JFrame {
 		txtFecha.setEditable(false);
 		txtFecha.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtFecha.setColumns(10);
-		txtFecha.setBounds(438, 100, 108, 20);
+		txtFecha.setBounds(352, 99, 108, 20);
 		contentPane.add(txtFecha);
 		
 		JPanel panelDatosProductos = new JPanel();
@@ -259,11 +263,31 @@ public class FrmBoleta extends JFrame {
 		panelDatosProductos.add(lblCantidadPlato);
 		lblCantidadPlato.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
+		btnEliminarProducto = new JButton("");
+		btnEliminarProducto.setEnabled(false);
+		btnEliminarProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarProdcutoSeleccionado();
+			}
+		});
+		btnEliminarProducto.setIcon(new ImageIcon(FrmBoleta.class.getResource("/img/deletProduct.png")));
+		btnEliminarProducto.setContentAreaFilled(false);
+		btnEliminarProducto.setBorderPainted(false);
+		btnEliminarProducto.setBounds(640, 316, 64, 64);
+		contentPane.add(btnEliminarProducto);
+
 		btnAgregar = new JButton("");
 		btnAgregar.setEnabled(false);
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				agregarProducto();
+				if(leerCantidad() >= 1) {
+					agregarProducto();
+					btnEliminarProducto.setEnabled(true);
+					txtCantidad.setText("");
+					txtNomProducto.setText("");
+					txtPrecioProducto.setText("");
+					btnAgregar.setEnabled(false);
+				}
 			}
 		});
 		btnAgregar.setIcon(new ImageIcon(FrmBoleta.class.getResource("/img/venta.png")));
@@ -284,17 +308,6 @@ public class FrmBoleta extends JFrame {
 		panelDatosProductos.add(txtCodProduccto);
 		txtCodProduccto.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(29, 317, 675, 126);
-		contentPane.add(scrollPane);
-		
-		tblListadoDetalleBoleta = new JTable();
-		tblListadoDetalleBoleta.setModel(modelo);
-		modelo.addColumn("Cant.");
-		modelo.addColumn("Descripcion");
-		modelo.addColumn("P.Unidad");
-		modelo.addColumn("Importe");
-		scrollPane.setViewportView(tblListadoDetalleBoleta);
 		
 		txtTotal = new JTextField();
 		txtTotal.setEditable(false);
@@ -308,6 +321,7 @@ public class FrmBoleta extends JFrame {
 		contentPane.add(lblTotalVenta);
 		
 		btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(this);
 		btnImprimir.setEnabled(false);
 		btnImprimir.setBounds(307, 454, 89, 23);
 		contentPane.add(btnImprimir);
@@ -330,11 +344,40 @@ public class FrmBoleta extends JFrame {
 		btnCerrar.setBorderPainted(false);
 		btnCerrar.setBounds(697, 11, 28, 28);
 		contentPane.add(btnCerrar);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(29, 316, 601, 108);
+		contentPane.add(scrollPane);
+		
+		tblProductosSeleccionados = new JTable();
+		tblProductosSeleccionados.setModel(modelo);
+		modelo.addColumn("idItem");
+		modelo.addColumn("descripcion");
+		modelo.addColumn("cantidad");
+		modelo.addColumn("precioUnd");
+		modelo.addColumn("importeTotal");
+		scrollPane.setViewportView(tblProductosSeleccionados);
+		
+		lblIdRecepcionista = new JLabel("Id Recepcionista:");
+		lblIdRecepcionista.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblIdRecepcionista.setBounds(470, 98, 117, 23);
+		contentPane.add(lblIdRecepcionista);
+		
+		txtIdRecepcionista = new JTextField();
+		txtIdRecepcionista.setEditable(false);
+		txtIdRecepcionista.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtIdRecepcionista.setColumns(10);
+		txtIdRecepcionista.setBounds(587, 99, 108, 20);
+		txtIdRecepcionista.setText(obtenerIdRecepcionista(3));
+		contentPane.add(txtIdRecepcionista);
+		
 	}
 	
 	
 	double total = 0;
-	private JButton btnImprimir;
+	int numeroItem = 1;
+	private JLabel lblIdRecepcionista;
+	private JTextField txtIdRecepcionista;
 	
 	
 	void agregarProducto() {
@@ -351,25 +394,52 @@ public class FrmBoleta extends JFrame {
 		idCliente = leerIdCli();
 		idProducto = txtCodProduccto.getText();
 		cantidadProducto = leerCantidad();
-		totalProductoSeleccionado = (cantidadProducto *(leerPrecio()));
-		nombreProducto = leerNomProd();
 		precioUnitProducto = leerPrecio();
-		ProductosSeleccionados_Temporal nuevo = new ProductosSeleccionados_Temporal(idBoleta, idCliente, idProducto, cantidadProducto, totalProductoSeleccionado, nombreProducto, precioUnitProducto);
-		int rs = new GestionVenta().insertarProductosSeleccionadosTemporal(nuevo);
+		totalProductoSeleccionado = (cantidadProducto * precioUnitProducto);
+		nombreProducto = leerNomProd();
+		System.out.println(totalProductoSeleccionado);
+		ProductosSeleccionados_Temporal nuevo = new ProductosSeleccionados_Temporal(numeroItem, idBoleta, idCliente, idProducto, cantidadProducto, totalProductoSeleccionado, nombreProducto, precioUnitProducto);
+		int rs = new GestionVenta().insertarProductosSeleccionadosTemporal(nuevo,numeroItem);
 		if(rs == 0) {
 			JOptionPane.showMessageDialog(this, "ERROR AL AGREGAR PRODUCTO AL CARRITO");
 		}
-		//-------------------------------------------------------------------------------------------------\\
+		listarProductosSeleccionados();
+		sumaTotalProductoSeleccionado(idCliente);
+		btnImprimir.setEnabled(true);
+		numeroItem++;
+	}
+	private void sumaTotalProductoSeleccionado(String idCliente) {
+		
+		total = new GestionVenta().sumaTotalProductosSeleccionados(idCliente);
+		txtTotal.setText(total+"");
+	}
+	private void eliminarProdcutoSeleccionado() {
+		String idCliente;
+		int numItem = -1;
+		int fila = tblProductosSeleccionados.getSelectedRow();
+		if (fila == -1) {
+			JOptionPane.showMessageDialog(this, "Seleccione un producto");
+		}else {
+			idCliente = leerIdCli();
+			numItem = Integer.parseInt(tblProductosSeleccionados.getValueAt(fila, 0).toString());
+			int eliminar = new GestionVenta().eliminarProductoSeleccionado(idCliente, numItem);
+			if(eliminar == 0) {
+				System.out.println("ERROR AL ELIMINAR PRODUCTO SELECCIONADO:FrmBoleta.eliminarProdcutoSeleccionado()");
+			}else {
+				listarProductosSeleccionados();
+				sumaTotalProductoSeleccionado(idCliente);
+			}
+		}
+		
+	}
+	private void listarProductosSeleccionados() {
 		ArrayList<ProductosSeleccionados_Temporal> lstProductosTemporal = new GestionVenta().lstProductosSeleccionados();
 		modelo.setRowCount(0);
 		for(ProductosSeleccionados_Temporal pt : lstProductosTemporal) {
-			Object datos[] = {pt.getCantidadProducto(), pt.getNombreProducto(), pt.getPrecioUnitProducto(), pt.gettotalProductoSeleccionado()};
+			Object datos[] = {pt.getNumItem(), pt.getNombreProducto(),pt.getCantidadProducto(), pt.getPrecioUnitProducto(), pt.getTotalProductoSeleccionado()};
 			modelo.addRow(datos);
-			total += (pt.getCantidadProducto()*pt.getPrecioUnitProducto());
 		}
-		btnImprimir.setEnabled(true);
 	}
-	
 	
 	
 	private String obtenerNumBoleta() {		
@@ -382,6 +452,11 @@ public class FrmBoleta extends JFrame {
 		return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 	}
 	
+	private String obtenerIdRecepcionista(int idUsuario) {
+		String id = new GestionVenta().obtenerRecepcionista(idUsuario);
+		System.out.println(id);
+		return id;
+	}
 	
 	//-----------------------------------------
 	private String leerNomCli() {
@@ -433,5 +508,12 @@ public class FrmBoleta extends JFrame {
 	private String leerNroBoleta() {
 		return txtNumBoleta.getText();
 	}
-	
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnImprimir) {
+			actionPerformedBtnImprimir(arg0);
+		}
+	}
+	protected void actionPerformedBtnImprimir(ActionEvent arg0) {
+		
+	}
 }

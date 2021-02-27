@@ -26,7 +26,7 @@ import mantemiento.GestionEmpleado;
 import mantemiento.GestionMantenimiento;
 import modelos.TipoDocumento;
 
-public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionListener {
+public class FrmRegistroEmpleado extends /**/JInternalFrame implements ActionListener {
 	private JButton btnCerrar;
 	private JLabel lblCodigo;
 	private JLabel lblNombres;
