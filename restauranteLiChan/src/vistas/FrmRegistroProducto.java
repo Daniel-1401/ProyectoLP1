@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -20,13 +21,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
-public class FrmRegistroProducto extends JFrame {
+public class FrmRegistroProducto extends JInternalFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txtCodProducto;
 	private JTextField txtNombreProd;
 	private JTextField txtPrecioProd;
+	private JButton btnCerrar;
 
 	/**
 	 * Launch the application.
@@ -49,13 +52,12 @@ public class FrmRegistroProducto extends JFrame {
 	 */
 	public FrmRegistroProducto() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 550, 300);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-	
-		setLocationRelativeTo(null);
+
 		
 		JLabel lblNewLabel = new JLabel("Registro de Producto");
 		lblNewLabel.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 20));
@@ -142,6 +144,16 @@ public class FrmRegistroProducto extends JFrame {
 		contentPane.add(btnLimpiar);
 		
 		txtCodProducto.setText(ObtenerCodProducto());
+		
+		btnCerrar = new JButton("");
+		btnCerrar.addActionListener(this);
+		btnCerrar.setSelectedIcon(new ImageIcon(FrmRegistroProducto.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnCerrar.setRolloverIcon(new ImageIcon(FrmRegistroProducto.class.getResource("/img/BOTON_CERRAR_2.png")));
+		btnCerrar.setIcon(new ImageIcon(FrmRegistroProducto.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnCerrar.setContentAreaFilled(false);
+		btnCerrar.setBorderPainted(false);
+		btnCerrar.setBounds(498, 10, 28, 28);
+		contentPane.add(btnCerrar);
 	}
 	
 	/********** Buscar *******/
@@ -260,4 +272,12 @@ public class FrmRegistroProducto extends JFrame {
 	
 	
 	
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnCerrar) {
+			actionPerformedBtnCerrar(arg0);
+		}
+	}
+	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
+		dispose();
+	}
 }

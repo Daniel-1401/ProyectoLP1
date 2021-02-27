@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 import hilos.HiloReloj;
 import mantemiento.GestionAcceso;
 import modelos.Acceso;
-import modelos.Usuario;
 import utils.ConectorBD;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

@@ -17,7 +17,7 @@ public class HiloLoader extends Thread{
 		for(int i = 0; i <= 100; i++) {
 			frmLoader.progressBar.setValue(i);
 			try {
-				Thread.sleep(35);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -115,7 +115,7 @@ public class FrmRegistroCliente extends JInternalFrame implements ActionListener
 	
 			}
 		});
-		btnEliminar.setBounds(360, 64, 107, 23);
+		btnEliminar.setBounds(360, 81, 107, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -124,7 +124,7 @@ public class FrmRegistroCliente extends JInternalFrame implements ActionListener
 				buscarCliente();
 			}
 		});
-		btnBuscar.setBounds(389, 88, 108, 23);
+		btnBuscar.setBounds(360, 114, 108, 23);
 		contentPane.add(btnBuscar);
 		
 		JButton btnActualizar = new JButton("Actualizar");
@@ -133,7 +133,7 @@ public class FrmRegistroCliente extends JInternalFrame implements ActionListener
 				actulizarCliente();
 			}
 		});
-		btnActualizar.setBounds(388, 127, 108, 23);
+		btnActualizar.setBounds(360, 147, 108, 23);
 		contentPane.add(btnActualizar);
 		
 		JButton btnLimpiar = new JButton("Limpiar");
@@ -202,7 +202,7 @@ public class FrmRegistroCliente extends JInternalFrame implements ActionListener
 		btnNewButton.setIcon(new ImageIcon(FrmRegistroCliente.class.getResource("/img/BOTON_CERRAR_1.png")));
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBounds(439, 0, 28, 28);
+		btnNewButton.setBounds(439, 10, 28, 28);
 		contentPane.add(btnNewButton);
 	}
 	

@@ -229,9 +229,9 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_CARGO
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_cargo` VALUES (1, "Administrador");
 INSERT INTO `tb_cargo` VALUES (2, "Recepcionista");
@@ -245,20 +245,20 @@ INSERT INTO `tb_tipo_documento` VALUES (1, "DNI");
 INSERT INTO `tb_tipo_documento` VALUES (2, "PASAPORTE");
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_CLIENTES
---------------------------
+-- ------------------------
 
-INSERT INTO `tb_clientes` VALUES ('C0001', 'Luis Erick'	  , 'Palomino Carranza','Av. los Alisos 450' , 980526474,1,65935856);
-INSERT INTO `tb_clientes` VALUES ('C0002', 'Jhomira'	 	  , 'Vega Galan'	   ,'Av las Palmeras 850', 965587430,2,'P20198056933');
-INSERT INTO `tb_clientes` VALUES ('C0003', 'Carlos Miguel'  , 'Ramos Marin'	   ,'Jr los Incas 2563'  , 960254793,2,'P20196358505');
-INSERT INTO `tb_clientes` VALUES ('C0004', 'Monica Fiorella', 'Hernandez Sanchez','Av. Argentina 1050' , 921347580,1,63587423);
-INSERT INTO `tb_clientes` VALUES ('C0005', 'Enrique'		  , 'Correa Flores'	   ,'Av. Colonial 700'   , 999674210,1,65423196);
+INSERT INTO `tb_clientes` VALUES ('C0001', 'Luis Erick'	  	 , 'Palomino Carranza'	,'Av. los Alisos 450' , 980526474,1,65935856);
+INSERT INTO `tb_clientes` VALUES ('C0002', 'Jhomira'	 	 , 'Vega Galan'	   		,'Av las Palmeras 850', 965587430,2,'P20198056933');
+INSERT INTO `tb_clientes` VALUES ('C0003', 'Carlos Miguel'   , 'Ramos Marin'	   	,'Jr los Incas 2563'  , 960254793,2,'P20196358505');
+INSERT INTO `tb_clientes` VALUES ('C0004', 'Monica Fiorella' , 'Hernandez Sanchez'	,'Av. Argentina 1050' , 921347580,1,63587423);
+INSERT INTO `tb_clientes` VALUES ('C0005', 'Enrique'		 , 'Correa Flores'	   	,'Av. Colonial 700'   , 999674210,1,65423196);
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_PRODUCTOS
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_producto` VALUES ('P0001', 'Chaufa con Pollo'		  , 9.00);
 INSERT INTO `tb_producto` VALUES ('P0002', 'Sopa Wantan'			  , 8.50);
@@ -267,9 +267,9 @@ INSERT INTO `tb_producto` VALUES ('P0004', 'Carne de Res a la Plancha', 26.00);
 INSERT INTO `tb_producto` VALUES ('P0005', 'Tallarin con Pollo'		  , 23.00);
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_USUARIOS
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_usuarios` VALUES(0001, "AD01", "ADMIN01");
 INSERT INTO `tb_usuarios` VALUES(0002, "AD02", "ADMIN02");
@@ -278,9 +278,9 @@ INSERT INTO `tb_usuarios` VALUES(0004, "RC02", "RECEP02");
 INSERT INTO `tb_usuarios` VALUES(0005, "RC03", "RECEP03");
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_EMPLEADO
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_empleado` VALUES ('A0001','CARLOS','AVALOS',1,'98125647'	,'2002-01-14',1,'men' ,'activo',0001);
 INSERT INTO `tb_empleado` VALUES ('A0002','EDSON' ,'MENDO' ,1,'94678135'	,'1999-03-04',1,'men'  ,'activo',0002);
@@ -289,37 +289,37 @@ INSERT INTO `tb_empleado` VALUES ('R0002','MARIA' ,'LOPEZ' ,2,'P20154687913','19
 INSERT INTO `tb_empleado` VALUES ('R0003','ABBY'  ,'LOPEZ' ,2,'P20176542676','1985-08-27',2,'woman','activo',0005);
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_ADMINISTRADOR
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_administrador` VALUES('A0001', 2500.00);
 INSERT INTO `tb_administrador` VALUES('A0002', 2500.00);
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_RECEPCIONISTA
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_recepcionista` VALUES('R0001',5,6,16);
 INSERT INTO `tb_recepcionista` VALUES('R0002',4,5,15);
 INSERT INTO `tb_recepcionista` VALUES('R0003',7,4,14);
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_BOLETA
---------------------------
+-- ------------------------
 
-INSERT INTO `tb_boleta` VALUES('B000000001','2021-01-14','C0001','R0003');
-INSERT INTO `tb_boleta` VALUES('B000000002','2021-01-15','C0003','R0002');
-INSERT INTO `tb_boleta` VALUES('B000000003','2021-01-16','C0005','R0003');
-INSERT INTO `tb_boleta` VALUES('B000000004','2021-01-17','C0004','R0002');
-INSERT INTO `tb_boleta` VALUES('B000000005','2021-02-01','C0002','R0001');
+INSERT INTO `tb_boleta` VALUES('B0001','2021-01-14','C0001','R0003');
+INSERT INTO `tb_boleta` VALUES('B0002','2021-01-15','C0003','R0002');
+INSERT INTO `tb_boleta` VALUES('B0003','2021-01-16','C0005','R0003');
+INSERT INTO `tb_boleta` VALUES('B0004','2021-01-17','C0004','R0002');
+INSERT INTO `tb_boleta` VALUES('B0005','2021-02-01','C0002','R0001');
 
 
---------------------------
+-- ------------------------
 -- DATOS TB_BOLETA
---------------------------
+-- ------------------------
 
 INSERT INTO `tb_boleta_detalle` VALUES('B000000001','P0001',2,18.00);
 INSERT INTO `tb_boleta_detalle` VALUES('B000000001','P0002',1,08.50);
@@ -333,16 +333,19 @@ INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0004',3,75.00);
 INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0003',4,38.00);
 
 
---------------------------
------ PROCEDIMIENTOS -----
---------------------------
+-- ------------------------
+-- --- PROCEDIMIENTOS -----
+-- ------------------------    
 
+-- -------------------
+--     EMPLEADOS
+-- -------------------
 
----------------------
--- REGISTRAR EMPLEADO
----------------------
+		-- ------------------------
+		-- REGISTRAR ADMINISTRADOR
+		-- ------------------------
 DELIMITER $$
-CREATE PROCEDURE ins_empleadoUsuario(
+CREATE PROCEDURE ins_empleadoAdmin(
 	`idEmpleado` 		VARCHAR(10),
 	`nombreEmpleado` 	VARCHAR(45),
 	`apellidoEmpleado` 	VARCHAR(45),
@@ -354,70 +357,176 @@ CREATE PROCEDURE ins_empleadoUsuario(
 	`estado` 			VARCHAR(8),
 	`idUsuario` 		INT,
 	`login` 			VARCHAR(15),
-	`password` 			CHAR(20)
+	`password` 			CHAR(20),
+    `sueldo`			DECIMAL(8,2)
 )
 BEGIN
 	INSERT INTO `tb_usuarios` VALUES(`idUsuario`, `login`, `password`);
 	INSERT INTO `tb_empleado` VALUES (`idEmpleado`,`nombreEmpleado`,`apellidoEmpleado`,`idTipoDocumento`,`numeroDocumento`,`fechaNacimiento`,`idCargo`,`genero`,`estado`,`idUsuario`);
+	INSERT INTO `tb_administrador` VALUES (`idEmpleado`, `sueldo`);
+END $$
+DELIMITER ;
+/*PRUEBA*/
+-- CALL ins_empleadoAdmin ('A0003','NombreAdmin','Aprueba',1,'76498513','2000-07-04',1,'woman','activo',0007,'loginAprueba','contraseña',3500);
+
+
+			-- -------------------------
+			-- ACTUALIZAR ADMINISTRADOR
+			-- -------------------------
+
+DELIMITER $$ 
+CREATE PROCEDURE upd_EmpleadoAdmin(
+	`idEmpleado` 		VARCHAR(10),
+	`nombreEmpleado` 	VARCHAR(45),
+	`apellidoEmpleado` 	VARCHAR(45),
+	`estado` 			VARCHAR(8),
+	`password` 			CHAR(20),
+    `sueldo`			DECIMAL(8,2)
+)
+BEGIN 
+	UPDATE `tb_empleado`
+    INNER JOIN `tb_usuarios` 		ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
+    INNER JOIN `tb_administrador`	ON `tb_empleado`.`idEmpleado`=`tb_administrador`.`idEmpleado`
+	SET `tb_empleado`.`nombreEmpleado`=`nombreEmpleado`,
+		`tb_empleado`.`apellidoEmpleado`=`apellidoEmpleado`,
+        `tb_empleado`.`estado`=`estado`,
+        `tb_usuarios`.`password`=`password`,
+        `tb_administrador`.`sueldo`=`sueldo`
+	WHERE `tb_empleado`.`idEmpleado` = `idEmpleado`;
 END $$
 DELIMITER ;
 
--- CALL ins_empleadoUsuario ('R0004','Nprueba','Aprueba',1,'76489123','2002-01-14',1,'men','activo',0006,'login','contraseña');
+-- CALL upd_EmpleadoAdmin('A0002','SETCH','ELADMIN','activo','password',9999);
 
 
---------------------
--- ELIMINAR USUARIO
---------------------
+/*
+-- Listar Recepcionista
+ select * from tb_empleado 
+	inner join tb_recepcionista on tb_empleado.idEmpleado=tb_recepcionista.idEmpleado
+	inner join tb_usuarios 		on tb_empleado.idUsuario=tb_usuarios.idUsuario;
+ -- Listar Admins
+ select * from tb_empleado 
+	inner join tb_administrador on tb_empleado.idEmpleado=tb_administrador.idEmpleado
+    inner join tb_usuarios 		on tb_empleado.idUsuario=tb_usuarios.idUsuario
+*/
+
+
+			-- ------------------------
+			-- REGISTRAR RECEPCIONISTA
+			-- ------------------------
+
+DELIMITER $$
+CREATE PROCEDURE ins_empleadoRecep(
+	`idEmpleado` 		VARCHAR(10),
+	`nombreEmpleado` 	VARCHAR(45),
+	`apellidoEmpleado` 	VARCHAR(45),
+	`idTipoDocumento` 	INT,
+	`numeroDocumento` 	VARCHAR(12),
+	`fechaNacimiento` 	DATE,
+	`idCargo` 			INT,
+	`genero` 			VARCHAR(5) ,
+	`estado` 			VARCHAR(8),
+	`idUsuario` 		INT,
+	`login` 			VARCHAR(15),
+	`password` 			CHAR(20),
+    `numHorasPorDia`	INT,
+    `diasLaborales`		INT,
+    `pagoPorHora`		DECIMAL(8,2)
+)
+BEGIN
+	INSERT INTO `tb_usuarios` 		VALUES(`idUsuario`, `login`, `password`);
+	INSERT INTO `tb_empleado` 		VALUES (`idEmpleado`,`nombreEmpleado`,`apellidoEmpleado`,`idTipoDocumento`,`numeroDocumento`,`fechaNacimiento`,`idCargo`,`genero`,`estado`,`idUsuario`);
+	INSERT INTO `tb_recepcionista`	VALUES (`idEmpleado`, `numHorasPorDia`,`diasLaborales`,`pagoPorHora`);
+END $$
+DELIMITER ;
+/*PRUEBA*/
+-- CALL ins_empleadoRecep ('R0004','NombreRecep','Aprueba',1,'76489123','2002-01-14',2,'men'  ,'activo',0006,'loginRprueba','contraseña',8,6,17.5);
+
+
+			-- -------------------------
+			-- ACTUALIZAR RECEPCIONISTA
+			-- -------------------------
+
+DELIMITER $$ 
+CREATE PROCEDURE upd_EmpleadoRecep(
+	`idEmpleado` 		VARCHAR(10),
+	`nombreEmpleado` 	VARCHAR(45),
+	`apellidoEmpleado` 	VARCHAR(45),
+	`estado` 			VARCHAR(8),
+	`password` 			CHAR(20),
+    `numHorasPorDia`	INT,
+    `diasLaborales`		INT,
+    `pagoPorHora`		DECIMAL(8,2)
+)
+BEGIN 
+	UPDATE `tb_empleado`
+    INNER JOIN `tb_usuarios` 		ON `tb_empleado`.`idUsuario` =`tb_usuarios`.`idUsuario`
+    INNER JOIN `tb_recepcionista`	ON `tb_empleado`.`idEmpleado`=`tb_recepcionista`.`idEmpleado`
+		SET `tb_empleado`.`nombreEmpleado`		=`nombreEmpleado`,
+			`tb_empleado`.`apellidoEmpleado`	=`apellidoEmpleado`,
+			`tb_empleado`.`estado`				=`estado`,
+			`tb_usuarios`.`password`			=`password`,
+			`tb_recepcionista`.`numHorasPorDia`	=`numHorasPorDia`,
+			`tb_recepcionista`.`diasLaborales`	=`diasLaborales`,
+			`tb_recepcionista`.`pagoPorHora`	=`pagoPorHora`
+	WHERE `tb_empleado`.`idEmpleado` = `idEmpleado`;
+END $$
+DELIMITER ;
+/*PRUEBA*/
+ -- CALL upd_EmpleadoRECEP('R0004','SETCH','ELRECEP','activo','password',9,9,99);
+ 
+
+		-- ------------------
+		-- ELIMINAR EMPLEADO
+		-- ------------------
 
 DELIMITER $$
 CREATE PROCEDURE del_Empleado(
 	`codigoEmpleado` 	VARCHAR(10)
 )
 BEGIN 
-    DELETE 
-		`tb_empleado`,
-        `tb_usuarios`
+	DELETE `tb_empleado`,
+        `tb_usuarios`,
+        `tb_administrador`,
+        `tb_recepcionista`
 	FROM `tb_empleado`
-	INNER JOIN `tb_usuarios` ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
+    INNER JOIN `tb_usuarios`	 ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario` 
+	LEFT JOIN `tb_recepcionista` ON `tb_empleado`.`idEmpleado`=`tb_recepcionista`.`idEmpleado`
+    LEFT JOIN `tb_administrador` ON `tb_empleado`.`idEmpleado`=`tb_administrador`.`idEmpleado`
     WHERE `tb_empleado`.`idEmpleado` = `codigoEmpleado`;
 END $$
 DELIMITER ;
 
+/*ELIMINAR EMPLEADO PRUEBA*/
 -- CALL del_Empleado ('R0004')
 
+-- -------------------
+-- VISTAS
+-- -------------------
+CREATE VIEW view_Administrador
+AS
+SELECT `tb_empleado`.*, `tb_usuarios` .`login`, `tb_administrador`.`sueldo`
+FROM `tb_empleado` 
+INNER JOIN `tb_administrador` ON `tb_empleado`.`idEmpleado`=`tb_administrador`.`idEmpleado`
+INNER JOIN `tb_usuarios` 	  ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`;
 
---------------------
--- ACTUALIZAR USUARIO
---------------------
-
-DELIMITER $$ 
-CREATE PROCEDURE upd_Empleado(
-	`idEmpleado` 		VARCHAR(10),
-	`nombreEmpleado` 	VARCHAR(45),
-	`apellidoEmpleado` 	VARCHAR(45),
-	`estado` 			VARCHAR(8),
-	`password` 			CHAR(20)
-)
-BEGIN 
-	UPDATE `tb_empleado`
-    INNER JOIN `tb_usuarios` ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`
-	SET `tb_empleado`.`nombreEmpleado`=`nombreEmpleado`,
-		`tb_empleado`.`apellidoEmpleado`=`apellidoEmpleado`,
-        `tb_empleado`.`estado`=`estado`,
-        `tb_usuarios`.`password`=`password`
-	WHERE `tb_empleado`.`idEmpleado` = `idEmpleado`;
-END $$
-DELIMITER ;
-
--- CALL upd_Empleado('R0004','SETCH','ELADMIN','inactivo','password');
+CREATE VIEW view_Recepcionista
+AS
+SELECT `tb_empleado`.*,`tb_usuarios` .`login`,`tb_recepcionista`.`numHorasPorDia`,`tb_recepcionista`.`diasLaborales`, `tb_recepcionista`.`pagoPorHora`
+FROM `tb_empleado` 
+INNER JOIN `tb_recepcionista` ON `tb_empleado`.`idEmpleado`=`tb_recepcionista`.`idEmpleado`
+INNER JOIN `tb_usuarios` 	  ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuario`;
 
 
-SELECT SUBSTRING(MAX(`tb_empleado`.`idEmpleado`),2) FROM `tb_empleado` WHERE `tb_empleado`.`idCargo` = 2
+/*VISTAR ADMINISTRADOR*/
+-- SELECT * FROM view_Administrador WHERE idEmpleado = 'A0001'
+/*VISTAR RECEPECIONISTA*/
+-- SELECT * FROM view_Recepcionista WHERE idEmpleado = 'R0001'
 
-
---------------------
--- ACCEDER USUARIO
---------------------
+			--------------------
+			-- ACCEDER USUARIO
+			--------------------
+            
 DELIMITER $$
 CREATE PROCEDURE accessUser(
 	`user` VARCHAR(15),
@@ -438,6 +547,9 @@ END $$
 DELIMITER ;
 
 -- CALL accessUser("AD01", "ADMIN01");
+
+-- SELECT SUBSTRING(MAX(`tb_empleado`.`idEmpleado`),2) FROM `tb_empleado` WHERE `tb_empleado`.`idCargo` = 2
+
 
 
 /*  ACTUALIZAR CLIENTE*/
@@ -478,4 +590,4 @@ begin
 end $$
 delimiter ;
 
-call usp_consultaCliente();
+-- call usp_consultaCliente();

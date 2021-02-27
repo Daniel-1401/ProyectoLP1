@@ -9,39 +9,40 @@ import java.util.ArrayList;
 
 
 import interfaces.EmpleadoInterface;
-import modelos.Empleado;
+import modelos.EmpleadoAdmin;
+import modelos.EmpleadoRecep;
 import modelos.TipoCargo;
 import modelos.TipoDocumento;
-import modelos.Usuario;
 import utils.ConectorBD;
 
 public class GestionEmpleado implements EmpleadoInterface{
 
 	@Override
-	public int registrarEmpleado(Empleado em, Usuario us) {
+	public int registrarEmpleadoAdmin(EmpleadoAdmin ea) {
 		int ok = 0;
 		Connection conexion = null;
 		PreparedStatement ejecutor = null;
 		try {
 			conexion = ConectorBD.getConexion();
-			String sentencia = "CALL ins_empleadoUsuario (?,?,?,?,?,?,?,?,?,?,?,?);";
+			String sentencia = "CALL ins_empleadoUsuario (?,?,?,?,?,?,?,?,?,?,?,?,?);";
 			ejecutor = conexion.prepareStatement(sentencia);
-			ejecutor.setString(1, em.getIdEmpleado());
-			ejecutor.setString(2, em.getNombreEmpleado());
-			ejecutor.setString(3, em.getApellidoEmpleado());
-			ejecutor.setInt(4, em.getIdTipoDocumento());
-			ejecutor.setString(5, em.getNumeroDocumento());
-			ejecutor.setString(6, em.getFechaNacimiento());
-			ejecutor.setInt(7, em.getIdCargo());
-			ejecutor.setString(8, em.getGenero());
-			ejecutor.setString(9, em.getEstado());
-			ejecutor.setInt(10, em.getIdUsuario());
-			ejecutor.setString(11, us.getLogin());
-			ejecutor.setString(12, us.getPassword());
+			ejecutor.setString(1, ea.getIdEmpleado());
+			ejecutor.setString(2, ea.getNombreEmpleado());
+			ejecutor.setString(3, ea.getApellidoEmpleado());
+			ejecutor.setInt(4, ea.getIdTipoDocumento());
+			ejecutor.setString(5, ea.getNumeroDocumento());
+			ejecutor.setString(6, ea.getFechaNacimiento());
+			ejecutor.setInt(7, ea.getIdCargo());
+			ejecutor.setString(8, ea.getGenero());
+			ejecutor.setString(9, ea.getEstado());
+			ejecutor.setInt(10, ea.getIdUsuario());
+			ejecutor.setString(11, ea.getUser());
+			ejecutor.setString(12, ea.getPass());
+			ejecutor.setDouble(13, ea.getSueldo());
 			
 			ok = ejecutor.executeUpdate();
 		}catch (Exception e) {
-			System.out.println("ERROR AL REGISTRAR: " + e.getMessage());
+			System.out.println("ERROR AL REGISTRAR ADMINISTRADOR: " + e.getMessage());
 		}finally {
 			try {
 				if(conexion != null) {
@@ -53,64 +54,109 @@ public class GestionEmpleado implements EmpleadoInterface{
 		}
  		return ok;
 	}
-
 	@Override
-	public int eliminarEmpleado(Empleado em) {
+	public int actualizarEmpledoAdmin(EmpleadoAdmin e) {
 		int ok = 0;
 		Connection conexion = null;
 		PreparedStatement ejecutor = null;
 		try {
 			conexion = ConectorBD.getConexion();
-			String sentencia = "CALL del_Empleado (?)";
-			ejecutor = conexion.prepareStatement(sentencia);
-			ejecutor.setString(1, em.getIdEmpleado());
-			ok = ejecutor.executeUpdate();
-		}catch (Exception e) {
-			System.out.println("ERROR AL ELIMINAR: " + e.getMessage());
-		}finally {
-			try {
-				if(conexion != null) {
-					conexion.close();
-				}
-			}catch (SQLException se) {
-				System.out.println("ERROR AL CERRA LA CONEXION: " + se.getMessage());
-			}
-		}
-		return ok;
-	}
-
-	@Override
-	public int actualizarEmpledo(Empleado e, Usuario u) {
-		int ok = 0;
-		Connection conexion = null;
-		PreparedStatement ejecutor = null;
-		try {
-			conexion = ConectorBD.getConexion();
-			String sentencia = "CALL upd_Empleado(?,?,?,?,?)";
+			String sentencia = "CALL upd_Empleado(?,?,?,?,?,?)";
 			ejecutor = conexion.prepareStatement(sentencia);
 			ejecutor.setString(1, e.getIdEmpleado());
 			ejecutor.setString(2, e.getNombreEmpleado());
 			ejecutor.setString(3, e.getApellidoEmpleado());
 			ejecutor.setString(4, e.getEstado());
-			ejecutor.setString(5, u.getPassword());
+			ejecutor.setString(5, e.getPass());
+			ejecutor.setDouble(6, e.getSueldo());
 			ok = ejecutor.executeUpdate();
 		}catch (Exception ex) {
-			System.out.println("ERROR AL ACTUALIZAR: " + ex.getMessage());
+			System.out.println("ERROR AL ACTUALIZAR ADMINISTRADOR: " + ex.getMessage());
 		}finally {
 			try {
 				if(conexion != null) {
 					conexion.close();
 				}
 			}catch (SQLException se) {
-				System.out.println("ERROR AL CERRAR CONEXIO: " + se.getMessage());
+				System.out.println("ERROR AL CERRAR CONEXION: " + se.getMessage());
+			}
+		}
+		return ok;
+	}
+	
+	@Override
+	public int registrarEmpleadoRecep(EmpleadoRecep er) {
+		int ok = 0;
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "CALL ins_empleadoRecep (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			ejecutor = conexion.prepareStatement(sentencia);
+			ejecutor.setString(1, er.getIdEmpleado());
+			ejecutor.setString(2, er.getNombreEmpleado());
+			ejecutor.setString(3, er.getApellidoEmpleado());
+			ejecutor.setInt(4, er.getIdTipoDocumento());
+			ejecutor.setString(5, er.getNumeroDocumento());
+			ejecutor.setString(6, er.getFechaNacimiento());
+			ejecutor.setInt(7, er.getIdCargo());
+			ejecutor.setString(8, er.getGenero());
+			ejecutor.setString(9, er.getEstado());
+			ejecutor.setInt(10, er.getIdUsuario());
+			ejecutor.setString(11, er.getUser());
+			ejecutor.setString(13, er.getPass());
+			ejecutor.setInt(14, er.getNumHorasPorDia());
+			ejecutor.setInt(15, er.getDiasLaborales());
+			ejecutor.setDouble(16, er.getPagoPorHora());
+			ok = ejecutor.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("ERROR AL REGISTRAR RECEPCIONISTA: " + e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException sq) {
+				System.out.println("ERROR AL CERRAR CONEXION: " + sq.getMessage());
+			}
+		}
+		return ok;
+	}
+	@Override
+	public int actualizarEmpleadoRecep(EmpleadoRecep er) {
+		int ok = 0;
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "CALL upd_EmpleadoRECEP(?,?,?,?,?,?,?,?)";
+			ejecutor = conexion.prepareStatement(sentencia);
+			ejecutor.setString(1, er.getIdEmpleado());
+			ejecutor.setString(2, er.getNombreEmpleado());
+			ejecutor.setString(3, er.getApellidoEmpleado());
+			ejecutor.setString(4, er.getEstado());
+			ejecutor.setString(6, er.getPass());
+			ejecutor.setInt(6, er.getNumHorasPorDia());
+			ejecutor.setInt(6, er.getDiasLaborales());
+			ejecutor.setDouble(6, er.getPagoPorHora());
+			ok = ejecutor.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("ERROR AL ACTUALIZAR RECEPCIONISTA: " + e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException se) {
+				System.out.println("ERROR AL CERRAR CONEXION: " + se.getMessage());
 			}
 		}
 		return ok;
 	}
 
 	@Override
-	public Empleado obtener(String id) {
-		Empleado empleado = new Empleado();
+	public EmpleadoRecep obtener(String id) {
+		EmpleadoRecep empleado = new EmpleadoRecep();
 		Connection conexion = null;
 		PreparedStatement ejecutor = null;
 		ResultSet rs = null;
@@ -146,6 +192,33 @@ public class GestionEmpleado implements EmpleadoInterface{
 		return empleado;
 	}
 
+	//---------------------------------------------V TERMINADO V-------------------------------------------------------\\
+	
+	@Override
+	public int eliminarEmpleado(String id) {
+		int ok = 0;
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "CALL del_Empleado (?)";
+			ejecutor = conexion.prepareStatement(sentencia);
+			ejecutor.setString(1, id);
+			ok = ejecutor.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("ERROR AL ELIMINAR: " + e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException se) {
+				System.out.println("ERROR AL CERRA LA CONEXION: " + se.getMessage());
+			}
+		}
+		return ok;
+	}
+
 	@Override
 	public ArrayList<TipoDocumento> listadoTipoDocumento() {
 		ArrayList<TipoDocumento> lista = null;
@@ -176,6 +249,37 @@ public class GestionEmpleado implements EmpleadoInterface{
 			}
 		}		
 		return lista;
+	}
+
+	@Override
+	public ArrayList<TipoCargo> listadoTipoCargo() {
+		ArrayList<TipoCargo> lstCargo = new ArrayList<TipoCargo>();
+		Connection conexion = null;
+		PreparedStatement ejecutor = null;
+		ResultSet rs = null;
+		try {
+			conexion = ConectorBD.getConexion();
+			String sentencia = "SELECT * FROM `tb_cargo`";
+			ejecutor = conexion.prepareStatement(sentencia);
+			rs = ejecutor.executeQuery();
+			while(rs.next()) {
+				TipoCargo tipoCargo = new TipoCargo();
+				tipoCargo.setIdCargo(rs.getInt(1));
+				tipoCargo.setDescripcion(rs.getString(2));
+				lstCargo.add(tipoCargo);
+			}
+		}catch (Exception e) {
+			System.out.println("ERROR AL LISTAR TIPOS DE CARGO: " +e.getMessage());
+		}finally {
+			try {
+				if(conexion != null) {
+					conexion.close();
+				}
+			}catch (SQLException se) {
+				System.out.println("ERROR AL CERRAR LA CONEXION: " + se.getMessage());
+			}
+		}
+		return lstCargo;
 	}
 
 	@Override
@@ -212,36 +316,5 @@ public class GestionEmpleado implements EmpleadoInterface{
 			}
 		}
 		return codigo;
-	}
-
-	@Override
-	public ArrayList<TipoCargo> listadoTipoCargo() {
-		ArrayList<TipoCargo> lstCargo = new ArrayList<TipoCargo>();
-		Connection conexion = null;
-		PreparedStatement ejecutor = null;
-		ResultSet rs = null;
-		try {
-			conexion = ConectorBD.getConexion();
-			String sentencia = "SELECT * FROM `tb_cargo`";
-			ejecutor = conexion.prepareStatement(sentencia);
-			rs = ejecutor.executeQuery();
-			while(rs.next()) {
-				TipoCargo tipoCargo = new TipoCargo();
-				tipoCargo.setIdCargo(rs.getInt(1));
-				tipoCargo.setDescripcion(rs.getString(2));
-				lstCargo.add(tipoCargo);
-			}
-		}catch (Exception e) {
-			System.out.println("ERROR AL LISTAR TIPOS DE CARGO: " +e.getMessage());
-		}finally {
-			try {
-				if(conexion != null) {
-					conexion.close();
-				}
-			}catch (SQLException se) {
-				System.out.println("ERROR AL CERRAR LA CONEXION: " + se.getMessage());
-			}
-		}
-		return lstCargo;
 	}
 }

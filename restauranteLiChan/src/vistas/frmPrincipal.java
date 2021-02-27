@@ -27,13 +27,12 @@ public class frmPrincipal extends JFrame implements ActionListener {
 	private JButton btnNewButton_3;
 	private JButton btnNewButton_2;
 	private JButton btnNewButton;
-	private JPanel panelContenedor;
+	public static JPanel panelContenedor;
 	private JButton btnLogOut;
 	private JButton btnSalir;
 	private JButton btnEmpleados;
 	private JButton btnClientes;
 	private JButton btnProductos;
-	private JButton btnReporteClientes;
 	private JButton btnReporteEmpleados;
 	private JButton btnReporteProductos;
 	private JButton btnVenta;
@@ -42,6 +41,8 @@ public class frmPrincipal extends JFrame implements ActionListener {
 	private JButton btnTransacciones;
 	private JButton btnReporte;
 	private JLabel imgBarra;
+	private int BarraMenu = 0;
+	private JButton btnReporteCliente;
 
 	/**
 	 * Launch the application.
@@ -65,6 +66,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 	public frmPrincipal() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//	setBounds(100, 100, 950, 750);
 		setBounds(100, 100, 950, 750);
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -88,7 +90,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		
 		panelContenedor = new JPanel();
 		panelContenedor.setBorder(new LineBorder(new Color(64, 64, 64), 2, true));
-		panelContenedor.setBounds(160, 40, 780, 700);
+		panelContenedor.setBounds(162, 40, 778, 700);
 		contentPane.add(panelContenedor);
 		panelContenedor.setLayout(null);
 		
@@ -127,12 +129,12 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		btnProductos.setBounds(162, 339, 130, 35);
 		contentPane.add(btnProductos);
 		
-		btnReporteClientes = new JButton("Clientes");
-		btnReporteClientes.addActionListener(this);
-		btnReporteClientes.setVisible(false);
-		btnReporteClientes.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnReporteClientes.setBounds(162, 582, 130, 35);
-		contentPane.add(btnReporteClientes);
+		btnReporteCliente = new JButton("Cliente");
+		btnReporteCliente.addActionListener(this);
+		btnReporteCliente.setVisible(false);
+		btnReporteCliente.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnReporteCliente.setBounds(162, 582, 130, 35);
+		contentPane.add(btnReporteCliente);
 		
 		btnReporteEmpleados = new JButton("Empleados");
 		btnReporteEmpleados.addActionListener(this);
@@ -191,6 +193,8 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		imgBarra.setIcon(new ImageIcon(frmPrincipal.class.getResource("/img/barraMenuu.png")));
 		imgBarra.setBounds(20, 40, 135, 700);
 		contentPane.add(imgBarra);
+		
+	
 		switch (frmLogin.user.getCargoUsuario()) {
 		case 1: {
 			btnTransacciones.setEnabled(false);break;
@@ -206,6 +210,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
+		
 		if (arg0.getSource() == btnSistema) {
 			AccionBtnSistema(arg0);
 		}
@@ -236,8 +241,8 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		if (arg0.getSource() == btnVenta) {
 			AccionbtnVenta(arg0);
 		}
-		if (arg0.getSource() == btnReporteClientes) {
-			AccionbtnReporteCliente(arg0);
+		if (arg0.getSource() == btnReporteCliente) {
+			actionPerformedBtnReporteCliente(arg0);
 		}
 		if (arg0.getSource() == btnReporteEmpleados) {
 			AccionbtnReporteEmpleado(arg0);
@@ -245,81 +250,144 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		if (arg0.getSource() == btnReporteProductos) {
 			AccionbtnReporteProducto(arg0);
 		}
+
+
+		
 	}
+	
+
 	public void AccionBtnSistema(ActionEvent arg0) {
-		ajustarPanelContenidoParaBarraMenu();
+		Abrir_CerrarMenu();
 		ApagarMenuItems();
-		MenuItem(btnLogOut, btnSalir, true);
+		if(BarraMenu==1) {
+			MenuItem(btnLogOut, btnSalir, true);
+		}
+		
 	}
-		private void AccionbtnLogOut(ActionEvent arg0) {
-			frmLogin login = new frmLogin();
-			login.setLocationRelativeTo(null);
-			login.setVisible(true);
-			dispose();
-			
-			
-		}
-		private void AccionbtnSalir(ActionEvent arg0) {
-			System.exit(0);
-		}
+			private void AccionbtnLogOut(ActionEvent arg0) {
+				BarraMenu = 0;
+				frmLogin login = new frmLogin();
+				login.setLocationRelativeTo(null);
+				login.setVisible(true);
+				dispose();
+			}
+			private void AccionbtnSalir(ActionEvent arg0) {
+				BarraMenu = 0;
+				System.exit(0);
+			}
 
 
 	public void AccionMantenimiento(ActionEvent arg0) {
-		ajustarPanelContenidoParaBarraMenu();
+		Abrir_CerrarMenu();
 		ApagarMenuItems();
-		MenuItem(btnEmpleados, btnClientes, btnProductos, true);
+		if(BarraMenu==1) {
+			MenuItem(btnEmpleados, btnClientes, btnProductos, true);
+		}
 	}
-		private void AccionbtnEmpleados(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnEmpleados, btnClientes,btnProductos, false);
-		}
-		private void AccionbtnClientes(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnEmpleados, btnClientes,btnProductos, false);
-			FrmRegistroCliente frm = new FrmRegistroCliente();
-			frm.setBounds(100, 100, 485, 400);
-			panelContenedor.add(frm);
-			frm.setVisible(true);
-			
-		}
-		private void AccionbtnProductos(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnEmpleados, btnClientes,btnProductos, false);
-		}
+			private void AccionbtnEmpleados(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnEmpleados, btnClientes,btnProductos, false);
+				FrmRegistroEmpleadosMenu frm = new FrmRegistroEmpleadosMenu();
+				frm.setBounds(100, 100, 480, 300);
+				panelContenedor.add(frm);
+				frm.setVisible(true);
+
+			}
+			private void AccionbtnClientes(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnEmpleados, btnClientes,btnProductos, false);
+				FrmRegistroCliente frm = new FrmRegistroCliente();
+				frm.setBounds(100, 100, 485, 400);
+				panelContenedor.add(frm);
+				frm.setVisible(true);
+
+			}
+			private void AccionbtnProductos(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnEmpleados, btnClientes,btnProductos, false);
+				FrmRegistroProducto frm = new FrmRegistroProducto();
+				frm.setBounds(100, 100, 550, 300);
+				panelContenedor.add(frm);
+				frm.setVisible(true);
+			}
 
 	
 	public void AccionbtnTransacciones(ActionEvent arg0) {
-		ajustarPanelContenidoParaBarraMenu();
+		Abrir_CerrarMenu();
 		ApagarMenuItems();
-		MenuItem(btnVenta, btnVenta, true);
-	}
-		private void AccionbtnVenta(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnVenta, false);
+		if(BarraMenu==1) {
+			MenuItem(btnVenta, btnVenta, true);
 		}
+	}
+			private void AccionbtnVenta(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnVenta, false);
+//				FrmConsultaCliente frm = new FrmConsultaCliente();
+//				frm.setBounds(100,100,550,300);
+//				panelContenedor.add(frm);
+//				frm.setVisible(true);
+				
+			}
 
-
-	public void AccionbtnReporte(ActionEvent arg0) {
-		ajustarPanelContenidoParaBarraMenu();
+	private void AccionbtnReporte(ActionEvent arg0) {
+		Abrir_CerrarMenu();
 		ApagarMenuItems();
-		MenuItem(btnReporteClientes, btnReporteEmpleados, btnReporteProductos, true);
+		if(BarraMenu==1) {
+			MenuItem(btnReporteCliente, btnReporteEmpleados, btnReporteProductos, true);
+		}
+
 	}
-		private void AccionbtnReporteProducto(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnReporteClientes, btnReporteEmpleados, btnReporteProductos, false);
-		}
-	
-		private void AccionbtnReporteEmpleado(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnReporteClientes, btnReporteEmpleados, btnReporteProductos, false);
-		}
-	
-		private void AccionbtnReporteCliente(ActionEvent arg0) {
-			ajustarPanelContenidoNormal();
-			MenuItem(btnReporteClientes, btnReporteEmpleados, btnReporteProductos, false);
-		}
+			private void actionPerformedBtnReporteCliente(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnReporteCliente,btnReporteEmpleados, btnReporteProductos, false);
+				FrmConsultaCliente frm = new FrmConsultaCliente();
+				frm.setBounds(100, 100, 650, 400);
+				panelContenedor.add(frm);
+				frm.setVisible(true);
+			}
+			private void AccionbtnReporteProducto(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnReporteCliente,btnReporteEmpleados, btnReporteProductos, false);
+				FrmConsultaProducto frm = new FrmConsultaProducto();
+				frm.setBounds(100, 100, 650, 400);
+				panelContenedor.add(frm);
+				frm.setVisible(true);
+				
+			}
+		
+			private void AccionbtnReporteEmpleado(ActionEvent arg0) {
+				BarraMenu = 0;
+				panelContenedor.removeAll();
+				ajustarPanelContenidoNormal();
+				MenuItem(btnReporteCliente,btnReporteEmpleados, btnReporteProductos, false);
+//				FrmConsultaCliente frm = new FrmConsultaCliente();
+//				frm.setBounds(100,100,550,300);
+//				panelContenedor.add(frm);
+//				frm.setVisible(true);
+				
+			}
 
-
+			
+		
+		public void Abrir_CerrarMenu() {
+			switch(BarraMenu) {
+			case 0: ajustarPanelContenidoParaBarraMenu(); BarraMenu = 1; break;
+			case 1: ajustarPanelContenidoNormal(); BarraMenu = 0; break;
+			default: break;
+			}
+		}
 		public void ApagarMenuItems() {
 			btnLogOut.setVisible(false);
 			btnSalir.setVisible(false);
@@ -327,7 +395,7 @@ public class frmPrincipal extends JFrame implements ActionListener {
 			btnClientes.setVisible(false);
 			btnProductos.setVisible(false);
 			btnVenta.setVisible(false);
-			btnReporteClientes.setVisible(false);
+			btnReporteCliente.setVisible(false);
 			btnReporteProductos.setVisible(false);
 			btnReporteEmpleados.setVisible(false);
 		}
@@ -350,4 +418,5 @@ public class frmPrincipal extends JFrame implements ActionListener {
 		public void ajustarPanelContenidoNormal() {
 			panelContenedor.setBounds(160, 40, 780, 700);
 		}
+	
 }

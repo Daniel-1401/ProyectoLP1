@@ -3,7 +3,10 @@ package vistas;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +23,15 @@ import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class FrmConsultaProducto extends JFrame {
+public class FrmConsultaProducto extends JInternalFrame implements ActionListener {
 
 	private JPanel contentPane;
 	DefaultTableModel modelo = new DefaultTableModel();
 	private JTable tblSalida;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -48,7 +54,7 @@ public class FrmConsultaProducto extends JFrame {
 	 */
 	public FrmConsultaProducto() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 400);
+		//setBounds(100, 100, 650, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -58,6 +64,16 @@ public class FrmConsultaProducto extends JFrame {
 		lblListadoDePrdocutos.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 20));
 		lblListadoDePrdocutos.setBounds(210, 26, 210, 30);
 		contentPane.add(lblListadoDePrdocutos);
+		
+		btnNewButton = new JButton("");
+		btnNewButton.addActionListener(this);
+		btnNewButton.setSelectedIcon(new ImageIcon(FrmConsultaCliente.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton.setRolloverIcon(new ImageIcon(FrmConsultaCliente.class.getResource("/img/BOTON_CERRAR_2.png")));
+		btnNewButton.setIcon(new ImageIcon(FrmConsultaCliente.class.getResource("/img/BOTON_CERRAR_1.png")));
+		btnNewButton.setContentAreaFilled(false);
+		btnNewButton.setBorderPainted(false);
+		btnNewButton.setBounds(583, 10, 28, 28);
+		contentPane.add(btnNewButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 77, 581, 260);
@@ -70,7 +86,7 @@ public class FrmConsultaProducto extends JFrame {
 		modelo.addColumn("Precio");
 		scrollPane.setViewportView(tblSalida);
 		
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		
 		listadoProducto();
 	}
@@ -90,4 +106,12 @@ public class FrmConsultaProducto extends JFrame {
 	}
 	
 
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnNewButton) {
+			actionPerformedBtnNewButton(arg0);
+		}
+	}
+	protected void actionPerformedBtnNewButton(ActionEvent arg0) {
+		dispose();
+	}
 }
