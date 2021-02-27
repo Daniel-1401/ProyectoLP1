@@ -11,7 +11,7 @@ public class ConectorBD {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String url = "jdbc:mysql://localhost:3306/RestauranteLiChan?useSSL=false&useTimezone=true&serverTimezone=UTC";
 			String usr = "root";
-			String psw = "mysql";
+			String psw = "toor";
 			con = DriverManager.getConnection(url, usr, psw);
 			/*System.out.println("Funciona");*/
 		} catch (ClassNotFoundException e) {

@@ -223,6 +223,22 @@ CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_administrador` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `RestauranteLiChan`.`tb_ClienteProducto_Temporal`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `RestauranteLiChan`.`tb_ClienteProducto_Temporal` ;
+
+CREATE TABLE IF NOT EXISTS `RestauranteLiChan`.`tb_ClienteProducto_Temporal` (
+  `idTemporal` INT NOT NULL AUTO_INCREMENT,
+  `idBoleta` VARCHAR(45) NOT NULL,
+  `idCliente` VARCHAR(45) NOT NULL,
+  `idProducto` VARCHAR(45) NOT NULL,
+  `CantidadProducto` INT NOT NULL,
+  `TotalProductoSeleccinado` DECIMAL(8,2) NOT NULL,
+  `NombreProducto` VARCHAR(45) NOT NULL,
+  `PrecioUnitProducto` DECIMAL(8,2) NOT NULL,
+  PRIMARY KEY (`idTemporal`))
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -265,6 +281,7 @@ INSERT INTO `tb_producto` VALUES ('P0002', 'Sopa Wantan'			  , 8.50);
 INSERT INTO `tb_producto` VALUES ('P0003', 'Caldo de Pollo c/ Verdura', 9.50);
 INSERT INTO `tb_producto` VALUES ('P0004', 'Carne de Res a la Plancha', 26.00);
 INSERT INTO `tb_producto` VALUES ('P0005', 'Tallarin con Pollo'		  , 23.00);
+
 
 
 -- ------------------------
@@ -321,16 +338,16 @@ INSERT INTO `tb_boleta` VALUES('B0005','2021-02-01','C0002','R0001');
 -- DATOS TB_BOLETA
 -- ------------------------
 
-INSERT INTO `tb_boleta_detalle` VALUES('B000000001','P0001',2,18.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000001','P0002',1,08.50);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000002','P0005',2,46.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000002','P0004',1,26.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000003','P0005',3,69.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000004','P0003',2,19.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0005',5,115.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0001',2,18.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0004',3,75.00);
-INSERT INTO `tb_boleta_detalle` VALUES('B000000005','P0003',4,38.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0001','P0001',2,18.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0001','P0002',1,08.50);
+INSERT INTO `tb_boleta_detalle` VALUES('B0002','P0005',2,46.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0002','P0004',1,26.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0003','P0005',3,69.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0004','P0003',2,19.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0005',5,115.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0001',2,18.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0004',3,75.00);
+INSERT INTO `tb_boleta_detalle` VALUES('B0005','P0003',4,38.00);
 
 
 -- ------------------------
@@ -397,7 +414,6 @@ END $$
 DELIMITER ;
 
 -- CALL upd_EmpleadoAdmin('A0002','SETCH','ELADMIN','activo','password',9999);
-
 
 /*
 -- Listar Recepcionista
@@ -522,10 +538,51 @@ INNER JOIN `tb_usuarios` 	  ON `tb_empleado`.`idUsuario`=`tb_usuarios`.`idUsuari
 -- SELECT * FROM view_Administrador WHERE idEmpleado = 'A0001'
 /*VISTAR RECEPECIONISTA*/
 -- SELECT * FROM view_Recepcionista WHERE idEmpleado = 'R0001'
+		
+        
+        -- -------------------------------------------
+		-- REGISTRAR PRODUCTOS DEL CLIENTE (TEMPORAL)
+		-- -------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE ins_productoClienteTemporal(
+  `idBoleta` 					VARCHAR(45),
+  `idCliente` 					VARCHAR(45),
+  `idProducto` 					VARCHAR(45),
+  `CantidadProducto` 			INT,
+  `TotalProductoSeleccinado` 	DECIMAL(8,2),
+  `NombreProducto` 				VARCHAR(45) ,
+  `PrecioUnitProducto` 			DECIMAL(8,2) 
+)
+BEGIN 
+	INSERT INTO `tb_clienteproducto_temporal` 
+		values	(`idBoleta` 				,
+				 `idCliente` 				,
+				 `idProducto` 				,
+				 `CantidadProducto` 		,
+				 `TotalProductoSeleccinado` ,
+			     `NombreProducto` 			,
+			     `PrecioUnitProducto`);
+END $$
+DELIMITER ;
 
-			--------------------
-			-- ACCEDER USUARIO
-			--------------------
+CALL ins_productoClienteTemporal(`idBoleta`,  `idCliente`,`idProducto`,`CantidadProducto`,`TotalProductoSeleccinado`,`NombreProducto`,`PrecioUnitProducto`)
+-- SELECT * FROM `tb_ClienteProducto_Temporal`
+
+		-- ------------------
+		-- REGISTRAR BOLETA
+		-- ------------------
+
+
+
+
+
+
+
+
+
+		-- ------------------
+		-- ACCEDER USUARIO
+		-- ------------------
             
 DELIMITER $$
 CREATE PROCEDURE accessUser(
