@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
+import java.net.IDN;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -24,9 +25,12 @@ import com.toedter.calendar.JDateChooser;
 
 import mantemiento.GestionEmpleado;
 import mantemiento.GestionMantenimiento;
+import mantemiento.GestionVenta;
+import modelos.EmpleadoAdmin;
+import modelos.EmpleadoRecep;
 import modelos.TipoDocumento;
 
-public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionListener {
+public class FrmRegistroEmpleado extends /**/JInternalFrame implements ActionListener {
 	private JButton btnCerrar;
 	private JLabel lblCodigo;
 	private JLabel lblNombres;
@@ -321,19 +325,67 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 	protected void actionPerformedBtnBuscar(ActionEvent arg0) {
 	}
 	protected void actionPerformedbtnRegistrar(ActionEvent arg0) {
-		leerNombre();
-		leerApellido();
-		leerCodigo();
-		leerTipoDocumento();
-		leerFecha();
-		leerGenero();
-		leerUsuario(); 
-		leerNumDoc();
-		leerContra();
-		leerSueldo();
-		leerPagoHora();
-		leerHorasLab();
-		leerDiasLab();
+		
+		String idEmpleado, nomEmpleado, apelliEmpleado, genero,
+				fechaNacimiento, usuario, pass, numeroDocumento;
+		int tipoDocumento;
+		double sueldo;
+		
+		int numHorasPorDia, diasLaborales;
+		double pagoPorHora;
+		
+		idEmpleado = leerNombre();
+		nomEmpleado = leerApellido();
+		apelliEmpleado = leerCodigo();
+		tipoDocumento = leerTipoDocumento();
+		fechaNacimiento = leerFecha();
+		genero = leerGenero();
+		usuario = leerUsuario();
+		numeroDocumento = leerNumDoc();
+		pass = leerContra();
+		
+		sueldo = leerSueldo();
+		
+		pagoPorHora = leerPagoHora();
+		diasLaborales = leerHorasLab();
+		numHorasPorDia = leerDiasLab();
+		
+		if (OpcionEmpleado == 1) {
+			leerSueldo();
+		}else {
+			leerPagoHora();
+			leerHorasLab();
+			leerDiasLab();	
+		}
+		
+		
+		EmpleadoRecep ep = new EmpleadoRecep();
+		ep.setIdEmpleado(idEmpleado);
+		ep.setNombreEmpleado(nomEmpleado);
+		ep.setApellidoEmpleado(apelliEmpleado);
+		ep.setGenero(genero);
+		ep.setFechaNacimiento(fechaNacimiento);
+		ep.setUser(usuario);
+		ep.setPass(pass);
+		ep.setNumeroDocumento(numeroDocumento);
+		ep.setIdTipoDocumento(tipoDocumento);
+		ep.setNumHorasPorDia(numHorasPorDia);
+		ep.setPagoPorHora(pagoPorHora);
+		ep.setDiasLaborales(diasLaborales);
+		
+		if (idEmpleado == null || nomEmpleado == null || apelliEmpleado == null || genero == null || fechaNacimiento == null
+				|| usuario == null || pass == null || numeroDocumento == null || tipoDocumento == 0 || numHorasPorDia == 0
+						|| pagoPorHora == 0 || diasLaborales== 0 ) {
+			JOptionPane.showMessageDialog(this, "Ingrese TODOS los datos requeridos");
+		}else {
+			GestionEmpleado e = new GestionEmpleado();
+			int rs = e.registrarEmpleadoRecep(ep);
+			JOptionPane.showMessageDialog(this, "Empleado " + "'" + ep.getNombreEmpleado() + " " 
+										+ ep.getApellidoEmpleado() + "'" + " Registrado");
+
+		}
+	
+		
 	}
 	protected void actionPerformedbtnNuevoRegistro(ActionEvent arg0) {
 		dispose();
@@ -466,7 +518,7 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 			return null;
 		}
 		
-		if(!txtUsuario.getText().matches("^[A-Z0-9]{​​​​​4}$")) {
+		if(!txtUsuario.getText().matches("")) {/*^[A-Z]{​​​​​2}[0-9]​​​​​{​​​​​2}$*/
 			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Usuario", "Aviso", 2);
 			return null;
 		}
@@ -482,7 +534,7 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 			return null;
 		}
 		
-		if(!String.valueOf(passwordField.getPassword()).matches("^[A-Z0-9]{​​​​​7}$")) { 
+		if(!String.valueOf(passwordField.getPassword()).matches("")) { /*^[A-Z0-9]{​​​​​7}$*/
 			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Contraseña", "Aviso", 2);
 			return null;
 		}
@@ -503,6 +555,7 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 		return Double.parseDouble(txtSueldo.getText());
 	}
 	
+	
 	private double leerPagoHora(){
 		if (txtPagoPorHora.getText().length()==0) {
 			JOptionPane.showMessageDialog(this, "Pago Por Hora es un campo OBLIGATORIO");
@@ -522,7 +575,7 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 			return 0;
 		}
 		
-		if(!txtNumHorasPorDia.getText().matches("^[0-9]{2}$")) {
+		if(!txtNumHorasPorDia.getText().matches("^[0-9]{1,2}$")) {
 			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en el Horas Por Dia", "Aviso", 2);
 			return 0;
 		}
@@ -536,11 +589,18 @@ public class FrmRegistroEmpleado extends /*Internal*/JFrame implements ActionLis
 			return 0;
 		}
 		
-		if(!txtDiasLaborales.getText().matches("^[0-9]{2}$")) {
+		if(!txtDiasLaborales.getText().matches("^[0-9]{1,2}$")) {
 			JOptionPane.showMessageDialog(this, "Ingrese Caracteres correctos en Dias Laborales", "Aviso", 2);
 			return 0;
 		}
 		return Integer.parseInt(txtDiasLaborales.getText());
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 }
