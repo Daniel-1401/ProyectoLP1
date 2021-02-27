@@ -424,44 +424,7 @@ public class GestionMantenimiento implements MantenimientoInterface{
 		return 0;
 	}
 
-	/******* BOLETA ****/
 	
-	public String generaNumeroBoleta() {
-		String numBol = null; 
-
-		Connection con = null;  
-		PreparedStatement pst = null;  
-		ResultSet rs = null;  
-
-		try {
-
-			con = ConectorBD.getConexion();
-
-			String sql = "select substring(max(idBoleta),2) from tb_boleta";
-
-			pst = con.prepareStatement(sql);
-
-			rs = pst.executeQuery();  
-
-			if (rs.next()) {
-				numBol = String.format("B%04d", rs.getInt(1)+1); 
-			}
-			
-		} catch (Exception e) {
-			System.out.println("Error en generaNumBoleta : " + e.getMessage());
-		} finally {
-			try {
-				if (con != null)
-					con.close();
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar conexión : " + e.getMessage());
-			}
-		}
-
-		return numBol;
-	}
-
 
 	
 	

@@ -35,9 +35,5 @@ public interface MantenimientoInterface {
 	public int actulizarProducto(RegistroCliente r); 
 	
 	
-	/************** Boleta *******************/
-	
-	public String generaNumeroBoleta();
-	
 	
 }

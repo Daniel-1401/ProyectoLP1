@@ -116,10 +116,12 @@ public class DlgProducto extends JDialog {
 			JOptionPane.showMessageDialog(this, "Seleccione un producto");
 			return ;
 		}
-		
+		FrmBoleta.txtCodProduccto.setText(tblSalida.getValueAt(fila, 0).toString());
 		FrmBoleta.txtNomProducto.setText(tblSalida.getValueAt(fila, 1).toString());
 		FrmBoleta.txtPrecioProducto.setText(tblSalida.getValueAt(fila, 2).toString());
 		dispose();
+		FrmBoleta.txtCantidad.setEditable(true);
+		FrmBoleta.btnAgregar.setEnabled(true);
 	}
 
 }
